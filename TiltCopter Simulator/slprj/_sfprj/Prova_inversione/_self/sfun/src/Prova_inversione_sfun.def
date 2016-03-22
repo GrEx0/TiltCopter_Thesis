@@ -1,0 +1,3 @@
+LIBRARY Prova_inversione_sfun.mexw64
+EXPORTS
+mexFunction

@@ -1,0 +1,39 @@
+CC     = "C:\Program Files\MATLAB\MATLAB Production Server\R2015a\sys\lcc64\lcc64\bin\lcc64.exe"
+LD     = "C:\Program Files\MATLAB\MATLAB Production Server\R2015a\sys\lcc64\lcc64\bin\lcclnk64.exe"
+LIBCMD = "C:\Program Files\MATLAB\MATLAB Production Server\R2015a\sys\lcc64\lcc64\bin\lcclib64.exe"
+CFLAGS = -dll -noregistrylookup  -c -Zp8 -DLCC_WIN64 -DMATLAB_MEX_FILE -DMX_COMPAT_32 -nodeclspec 
+LDFLAGS = -s -dll -L"C:\Program Files\MATLAB\MATLAB Production Server\R2015a\sys\lcc64\lcc64\lib64" -entry LibMain -map sfun.map 
+LIBFLAGS = 
+
+OBJECTS = \
+	"Prova_inversione_sfun.obj"\
+	"c5_Prova_inversione.obj"\
+	"Prova_inversione_sfun_registry.obj"\
+	"lccstub.obj"\
+	"Prova_inversione_sfun.def"\
+	"C:\Program Files\MATLAB\MATLAB Production Server\R2015a\extern\lib\win64\microsoft\sf_runtime.lib"\
+	"C:\Program Files\MATLAB\MATLAB Production Server\R2015a\extern\lib\win64\microsoft\libmwblas.lib"\
+	"C:\Program Files\MATLAB\MATLAB Production Server\R2015a\extern\lib\win64\microsoft\libmx.lib"\
+	"C:\Program Files\MATLAB\MATLAB Production Server\R2015a\extern\lib\win64\microsoft\libmex.lib"\
+	"C:\Program Files\MATLAB\MATLAB Production Server\R2015a\extern\lib\win64\microsoft\libmat.lib"\
+	"C:\Program Files\MATLAB\MATLAB Production Server\R2015a\extern\lib\win64\microsoft\libfixedpoint.lib"\
+	"C:\Program Files\MATLAB\MATLAB Production Server\R2015a\extern\lib\win64\microsoft\libut.lib"\
+	"C:\Program Files\MATLAB\MATLAB Production Server\R2015a\extern\lib\win64\microsoft\libmwmathutil.lib"\
+	"C:\Program Files\MATLAB\MATLAB Production Server\R2015a\extern\lib\win64\microsoft\libemlrt.lib"\
+	"C:\Program Files\MATLAB\MATLAB Production Server\R2015a\extern\lib\win64\microsoft\libmwsl_log_load_blocks.lib"\
+	"C:\Program Files\MATLAB\MATLAB Production Server\R2015a\extern\lib\win64\microsoft\libmwsimulink.lib"\
+	"C:\Program Files\MATLAB\MATLAB Production Server\R2015a\lib\win64\libmwipp.lib"\
+
+INCLUDE_PATH= -I"C:\Program Files\MATLAB\MATLAB Production Server\R2015a\sys\lcc64\lcc64\include64"  -I"C:\Program Files\MATLAB\MATLAB Production Server\R2015a\extern\include"  -I"C:\Program Files\MATLAB\MATLAB Production Server\R2015a\simulink\include"  -I"C:\Program Files\MATLAB\MATLAB Production Server\R2015a\stateflow\c\mex\include"  -I"C:\Program Files\MATLAB\MATLAB Production Server\R2015a\rtw\c\src"  -I"C:\Users\Claudio\Documents\MATLAB\Tesi\TiltCopter Simulator\slprj\_sfprj\Prova_inversione\_self\sfun\src" 
+ 
+
+Prova_inversione_sfun.mexw64 : $(MAKEFILE) $(OBJECTS)
+	$(LD) $(LDFLAGS) -o Prova_inversione_sfun.mexw64 @Prova_inversione_sfun.lmko
+Prova_inversione_sfun.obj :	"Prova_inversione_sfun.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "Prova_inversione_sfun.c"
+c5_Prova_inversione.obj :	"c5_Prova_inversione.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "c5_Prova_inversione.c"
+Prova_inversione_sfun_registry.obj :	"Prova_inversione_sfun_registry.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "Prova_inversione_sfun_registry.c"
+lccstub.obj :	"C:\Program Files\MATLAB\MATLAB Production Server\R2015a\sys\lcc64\lcc64\mex\lccstub.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "C:\Program Files\MATLAB\MATLAB Production Server\R2015a\sys\lcc64\lcc64\mex\lccstub.c"

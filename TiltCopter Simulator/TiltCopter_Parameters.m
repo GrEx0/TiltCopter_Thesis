@@ -98,5 +98,29 @@ dNdr = -0.0185;                  %[Nm*s] Stability derivative of the vehicle yaw
 dLMN = [dLdp  0    0   ;
          0   dMdq  0   ;
          0    0   dNdr];
+     
+%% Saturations
+rollMax = pi/6;     %[rad]
+pitchMax = pi/6;    %[rad]
+yawRateMax = pi/2;  %[rad/s]
 
+%%
+%% Altitude regulator
+KaN = 38;
 
+KaP = 8.0;
+KaI = 3.6;
+KaD = 5.4;
+
+%Anti-Windup (Back-calculation)
+% Kba = 0;
+Kba = sqrt(KaD/KaI);
+sata = 5;
+Fx = 0 ;
+Fy = 0;
+rho = 2*Kt*b*omega_hover;          % Gain on control variable U1
+
+Kp = 0.193;
+Ki = 0.892;
+Kp_ext = 0.0571;
+Ki_ext = 0.312;

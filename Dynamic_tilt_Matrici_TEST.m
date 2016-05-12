@@ -57,7 +57,7 @@ for i=1:n_rotors
            R_BPi_axis = subs(R_BPi_axis,phi,alpha_1)    % Rotation matrix from group propeller Pi to body 
            F_1 = R_BPi_axis*T_p1
            Op1 = R_z_axis * [ b; 0 ; 0];
-           M_1 = cross(Op1,F_1) - R_BPi_axis *tau_d1;
+           M_1 = cross(Op1,F_1) - R_BPi_axis *tau_d1;           % All'inizio era  M- R_BPi_axis
         case 2
             disp('Matrice di rotazione 2');
             R_BPi_axis = subs(R_BPi_axis,phi,alpha_2)
@@ -94,7 +94,26 @@ M_ext1 = subs(M_ext,alpha_1,0);
 M_ext2 = subs(M_ext1,alpha_2,0);
 M_ext3 = subs(M_ext2,alpha_3,0);
 M_ext_notilt = subs(M_ext3,alpha_4,0)           % Check torques when alpha_i = 0 -> standard quadcopter configuration
+%% Equation of motion computation
+syms u v w  p q r N E D
 
+%Traslational
+V_b = [ u; v; w];
+omega_b = [p;q;r];
+P_e = [N; E;D];
+
+cross(omega_b,V_b);
+
+% Rotational
+syms Ixx Iyy Izz real
+
+In = diag([Ixx Iyy Izz]);
+cross(omega_b,(In*omega_b))
+
+% since wd_b =  [M_ext - wb x (In*wb)]* In^-1  -> vedi appunti quaderno
+
+
+%% Linearized Mixer Matrix computation
 syms omega_1sq omega_2sq omega_3sq omega_4sq omega_hover_sq real
 MM = [ F_ext; M_ext ];
 
@@ -122,7 +141,7 @@ MM_param_jaco= subs(MM_param_jaco,omega_4sq,omega_hover_sq);
 MM_param_jaco= subs(MM_param_jaco,alpha_1,0);
 MM_param_jaco= subs(MM_param_jaco,alpha_2,0);
 MM_param_jaco= subs(MM_param_jaco,alpha_3,0);
-MM_param_jaco= subs(MM_param_jaco,alpha_4,0)
+MM_param_jaco= subs(MM_param_jaco,alpha_4,0)        % è la mixer matrix linearizzata finale, valutata in alpha = 0 e per omega = omega_hover
 
 
 %% Provo a vedere cosa mi da la mixer matrix con angoli di tilt nulli
@@ -146,7 +165,8 @@ Kq = Cq*ro*A*R^3;
 OMEhov = sqrt((m*g/Kt)/4);       % Angular velocity at Hovering
 omega_hover = OMEhov;            % Conversion nomeclature :)
 
-% Ricavata come [F_ext(3);M_ext] e poi fai il jacobiano
+% Ricavata come [F_ext(3);M_ext] e poi fai il jacobiano, in questo caso
+% linearizzi su alpha_1,2,3,4 e omega_sq = omega^2
 Mixer_matrix_raw = [F_ext(3);M_ext];
 K_mix = subs(Mixer_matrix_raw,omega_1^2,omega_1sq);
 K_mix = subs(K_mix,omega_2^2,omega_2sq);
@@ -164,7 +184,7 @@ K = [  -Kt,   -Kt,   -Kt,  -Kt;
 Kinv = inv(K);
 Kinv*[-15;0;0;0]            % FUNZIONA, quindi la matrice è giusta, bisogna risolvere introducendo gli alpha
 
-%% Ricavo le relazioni non lineari per ricavare le alpha
+%% Method 2 : non linear relation between alpha and Fx,Fy
 syms Fx Fy real;
 Eqn_Fx = subs(F_ext(1),alpha_4,-alpha_2);
 Eqn_Fx = Eqn_Fx - Fx;

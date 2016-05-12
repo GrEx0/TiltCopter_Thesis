@@ -9,12 +9,16 @@ TiltCopter_Parameters
 tsim = 20;
 
 %Set point 
-T = -20;
-L = 0 ;
+T = -m*g;
+L = 1 ;
 M = 0 ;
 N = 0;
-Fx = 0.5;
+Fx = 0;
 Fy = 0;
+
+%Set point u = [height[m] roll_a[rad] pitch_a[rad] yaw_r[rad/s]]
+U = [15; 0; 0; 0];
+
 
 sim TiltCopter_Simulator
 

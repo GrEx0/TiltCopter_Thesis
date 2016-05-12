@@ -17,7 +17,7 @@ Fx = 0;
 Fy = 0;
 
 %Set point u = [height[m] roll_a[rad] pitch_a[rad] yaw_r[rad/s]]
-U = [-4; 0; 0; 0];
+U = [-4; 0; pi/16; 0];
 
 
 sim TiltCopter_TOSTO_v2_2
@@ -58,15 +58,15 @@ legend('phi', 'theta', 'psi')
 % 
 % %% 3D Animation
  
-global index_view;
-global old_position;
-
-index_view = 0;
-old_position = [0 0 0];
-
-for i = 1:length(tout)
-    draw_mod([P_e(i,:) Alpha_e(i,:)]);
-end
+% global index_view;
+% global old_position;
+% 
+% index_view = 0;
+% old_position = [0 0 0];
+% 
+% for i = 1:length(tout)
+%     draw_mod([P_e(i,:) Alpha_e(i,:)]);
+% end
 
 
  %% End of code

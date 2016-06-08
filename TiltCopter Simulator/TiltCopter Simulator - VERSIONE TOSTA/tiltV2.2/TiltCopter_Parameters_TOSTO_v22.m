@@ -38,7 +38,7 @@ B3 = 1;
 ServoMotor_Gain = 1.409e04;
 
 %s = tf('s');
-%G_servo = B0/(B3+B2*s+B1*s+B0);
+%G_servo = B0/(B3*s^3+B2*s^2+B1*s+B0);
 
 % Conversion angle -> pulse width
 % Relationship between pulse and position:

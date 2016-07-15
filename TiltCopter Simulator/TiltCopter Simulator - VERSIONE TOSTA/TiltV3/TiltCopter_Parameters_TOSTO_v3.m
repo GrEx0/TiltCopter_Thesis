@@ -39,10 +39,10 @@ ServoMotor_Gain = 1.409e04;
 B4 = 1.409e04;
 
 % State space representation
-A = [0 1 0; 0 0 1 ; -B0/B3 -B1/B3 -B2/B3];
-B = [0 ; 0 ; B0/B3];
-C = eye(3);
-D = 0 ; 
+A_Servo = [0 1 0; 0 0 1 ; -B0/B3 -B1/B3 -B2/B3];
+B_Servo = [0 ; 0 ; B0/B3];
+C_Servo = eye(3);
+D_Servo = 0 ; 
 
 % s = tf('s');
 % G_servo = B0/(B3*s^3+B2*s^2+B1*s+B0);

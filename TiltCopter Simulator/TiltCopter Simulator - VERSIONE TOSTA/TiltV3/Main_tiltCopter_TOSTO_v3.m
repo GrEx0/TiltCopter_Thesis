@@ -20,15 +20,15 @@ Fy = 0;
 U = [-1; 0; 0; 0];
 
 
-sim TiltCopter_TOSTO_v3
+sim TiltCopter_TOSTO_v4
 
 P_e = yout(: ,1:3);
 V_b = yout(: ,4:6);
 Ome_b = yout(: ,7:9);
 Alpha_e = yout(: ,10:12);
-initial_value = (length(Uscita_quad.signals.values) - length(yout));
-Motor_thr = Uscita_quad.signals.values(initial_value:length(Uscita_quad.signals.values),1:4);
-Tilt_angles = (Uscita_quad.signals.values(initial_value:length(Uscita_quad.signals.values),5:8)- q_servo)*1/m_servo;
+%initial_value = (length(Uscita_quad.signals.values) - length(yout));
+Motor_thr = Uscita_quad.signals.values(:,1:4);
+Tilt_angles = (Uscita_quad.signals.values(:,5:8)- q_servo)*1/m_servo;
 
 %% Plot OUTPUT
 figure('name','POSITION_EARTH')

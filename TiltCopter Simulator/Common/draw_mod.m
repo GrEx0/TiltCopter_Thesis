@@ -172,15 +172,15 @@ quad.l = line(x+rot_braccio_4(1,:)*points,y+rot_braccio_4(2,:)*points,z+rot_brac
 old_position = [x,y,z];
 
 % Set the camera position and target
-camtarget_x = x;
-camtarget_y = y;
-camtarget_z = z;
-campos_x = (camtarget_x/2 + camtarget_y)*10 - 2;
-campos_y = (camtarget_y/2 - camtarget_x)*10 - 1;
-campos_z = camtarget_z + sqrt(campos_x^2+campos_y^2)/6 + 3;
-
-camtarget([camtarget_x,camtarget_y,camtarget_z]);     
-campos([campos_x,campos_y,campos_z]);
+% camtarget_x = x;
+% camtarget_y = y;
+% camtarget_z = z;
+% campos_x = (camtarget_x/2 + camtarget_y)*10 - 2;
+% campos_y = (camtarget_y/2 - camtarget_x)*10 - 1;
+% campos_z = camtarget_z + sqrt(campos_x^2+campos_y^2)/6 + 3;
+% 
+% camtarget([camtarget_x,camtarget_y,camtarget_z]);     
+% campos([campos_x,campos_y,campos_z]);
 
 % Count the iterations
 index_view = index_view + 1;

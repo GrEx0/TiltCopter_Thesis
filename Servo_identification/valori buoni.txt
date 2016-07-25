@@ -1,0 +1,13 @@
+2 discreto
+3 buono
+4 perfect
+5 perfect
+6 perfect
+7 perfect
+8 perfect
+9 perfect
+-- id11
+2 perfect
+5 perfect
+6 perfect perfect
+8 discreto

@@ -6,7 +6,8 @@ g = 9.81;
 degtorad = pi/180;              % Degrees to radiant conversion
 
 %% Tiltcopter Properties
-m = 1.510;                       %[kg] Body mass
+%m = 1.510;                      %[kg] Body mass
+m = 1.900;                       
 Mb = diag([m m m]);              %[Kg] Mass matrix
 MbInv = Mb\eye(3);               %[Kg^-1] Inverse of mass matrix
 b = 0.55/2;                      %[m] Arm lenght
@@ -126,8 +127,12 @@ yawRateMax = pi/2;  %[rad/s]
 fc = 100;   %[Hz]
 tc = 1/fc;  %[s]
 
-delay_altitude = 2;
-delay_attitude = 2;
+delay_altitude = 1;
+delay_attitude = 1;
+delay_mixer = 1;
+delay_OptiTrack = 0;
+delay_IMU = 1;
+delay_Kaltitude = 1;
 
 %% Angular-rate regulators
 Tf = .01;
@@ -205,5 +210,9 @@ KaD = 5.4;
 % Kba = 0;
 Kba = sqrt(KaD/KaI);
 sata = 5;
+
+%% Traslational Controller
+Kp_v = 19;
+Kp_u = 19;
 
  %% End of code

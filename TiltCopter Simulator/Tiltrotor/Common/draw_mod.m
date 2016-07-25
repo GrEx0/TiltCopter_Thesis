@@ -1,5 +1,6 @@
 function draw_mod(input)
 % ----------------------------------------------------
+% TILTROTOR VERSION
 % Draws the quadrotor in 3 dimensions during the simulation.
 % This script is invoked once for each animation frame.
 % ----------------------------------------------------
@@ -70,21 +71,21 @@ rot_braccio_4 = rot*R_BPi;
 % called.
 if index_view == 0
    
-    % Initialize the figure
-    screen = get(0,'screensize');
-    visual = figure(1);
- %set(visual,'position',[2 65 screen(3)-40 screen(4)-300]);
-    clf(visual);
-    hold on;
-    cameratoolbar('show');
-    axis vis3d;
-    view(3);
-    zoom(0.8);
-        
-    % The following two lines can be deleted for better performances.
-    set(gcf,'menubar','figure','renderer','opengl');
-    set(gca,'Visible','On','Box','On','XGrid', 'on','YGrid', 'on','ZGrid',...
-        'on','projection','perspective');    
+%     % Initialize the figure
+%     screen = get(0,'screensize');
+%     visual = figure(1);
+%  %set(visual,'position',[2 65 screen(3)-40 screen(4)-300]);
+%     clf(visual);
+%     hold on;
+%     cameratoolbar('show');
+%     axis vis3d;
+%     view(3);
+%     zoom(0.6);
+%         
+%     % The following two lines can be deleted for better performances.
+%     set(gcf,'menubar','figure','renderer','opengl');
+%     set(gca,'Visible','On','Box','On','XGrid', 'on','YGrid', 'on','ZGrid',...
+%         'on','projection','perspective');    
         
     % Draw fixed frame reference
     %N

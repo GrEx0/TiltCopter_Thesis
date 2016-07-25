@@ -30,7 +30,7 @@ n_rotors = 4;
 syms Kt Kq  m integer                             % Aerodinamic coefficients
 syms omega_1 omega_2 omega_3 omega_4 alpha_1 alpha_2 alpha_3 alpha_4 real         % Angular velocities of the rotors
 syms  b integer                                    %length between rotor and COG
-g = 9.81;
+syms g real
 Fg = m*[ ;0; 0; g];
 
 %Propeller Thrusts 

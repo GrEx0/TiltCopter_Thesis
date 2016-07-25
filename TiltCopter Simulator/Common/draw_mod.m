@@ -70,21 +70,21 @@ rot_braccio_4 = rot*R_BPi;
 % called.
 if index_view == 0
    
-    % Initialize the figure
-    screen = get(0,'screensize');
-    visual = figure(1);
- %set(visual,'position',[2 65 screen(3)-40 screen(4)-300]);
-    clf(visual);
-    hold on;
-    cameratoolbar('show');
-    axis vis3d;
-    view(3);
-    zoom(0.6);
+%     % Initialize the figure
+%     screen = get(0,'screensize');
+%     visual = figure(1);
+%  %set(visual,'position',[2 65 screen(3)-40 screen(4)-300]);
+%     clf(visual);
+%     hold on;
+%     cameratoolbar('show');
+%     axis vis3d;
+%     view(3);
+%     zoom(0.6);
         
     % The following two lines can be deleted for better performances.
-    set(gcf,'menubar','figure','renderer','opengl');
-    set(gca,'Visible','On','Box','On','XGrid', 'on','YGrid', 'on','ZGrid',...
-        'on','projection','perspective');    
+%     set(gcf,'menubar','figure','renderer','opengl');
+%     set(gca,'Visible','On','Box','On','XGrid', 'on','YGrid', 'on','ZGrid',...
+%         'on','projection','perspective');    
         
     % Draw fixed frame reference
     %N
@@ -175,11 +175,11 @@ old_position = [x,y,z];
 % camtarget_x = x;
 % camtarget_y = y;
 % camtarget_z = z;
-% campos_x = (camtarget_x/2 + camtarget_y)*10 - 2;
-% campos_y = (camtarget_y/2 - camtarget_x)*10 - 1;
+% campos_x = (camtarget_x/2 + camtarget_y)*100000 - 10;
+% campos_y = (camtarget_y/2 - camtarget_x)*100000 - 10;
 % campos_z = camtarget_z + sqrt(campos_x^2+campos_y^2)/6 + 3;
 % 
-% camtarget([camtarget_x,camtarget_y,camtarget_z]);     
+% %camtarget([camtarget_x,camtarget_y,camtarget_z]);     
 % campos([campos_x,campos_y,campos_z]);
 
 % Count the iterations

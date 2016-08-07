@@ -5,11 +5,11 @@
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
  *
- * Code generation for model "traslational_controller".
+ * Code generation for model "Traslational_controller".
  *
- * Model version              : 1.115
+ * Model version              : 1.122
  * Simulink Coder version : 8.10 (R2016a) 10-Feb-2016
- * C++ source code generated on : Mon Jul 25 09:41:14 2016
+ * C++ source code generated on : Fri Aug 05 17:29:59 2016
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping

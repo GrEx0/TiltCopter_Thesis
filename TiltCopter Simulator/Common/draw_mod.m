@@ -154,6 +154,8 @@ quad.f = line(x+rot(1,:)*points,y+rot(2,:)*points,z+rot(3,:)*points,...
 % quad.h = arrow([x ;y ;z]+rot*[0 ;0.4; 0],[x ;y ;z]+rot*[0 ;0.4 ;0.3],10,'BaseAngle',20,'Color','r');
 % quad.i = arrow([x ;y ;z]+rot*[0.4 0 0],[x ;y ;z]+rot*[0.4 0 0.3],10,'BaseAngle',20,'Color','r');
 % quad.l = arrow([x ;y ;z]+rot*[-0.4 0 0],[x ;y ;z]+rot*[-0.4 0 0.3],10,'BaseAngle',20,'Color','r');
+
+% Thrusts
 points = [0.4 0.4;0 0;THROTTLE_MAX*th_1/100 0];
 quad.g = line(x+rot_braccio_1(1,:)*points,y+rot_braccio_1(2,:)*points,z+rot_braccio_1(3,:)*points,...
             'linewidth',2,'color','red');

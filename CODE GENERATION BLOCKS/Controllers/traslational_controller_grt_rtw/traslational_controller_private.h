@@ -1,15 +1,15 @@
 /*
- * traslational_controller_private.h
+ * Traslational_controller_private.h
  *
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
  *
- * Code generation for model "traslational_controller".
+ * Code generation for model "Traslational_controller".
  *
- * Model version              : 1.115
+ * Model version              : 1.122
  * Simulink Coder version : 8.10 (R2016a) 10-Feb-2016
- * C++ source code generated on : Mon Jul 25 09:41:14 2016
+ * C++ source code generated on : Fri Aug 05 17:29:59 2016
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -18,8 +18,29 @@
  * Validation result: Not run
  */
 
-#ifndef RTW_HEADER_traslational_controller_private_h_
-#define RTW_HEADER_traslational_controller_private_h_
+#ifndef RTW_HEADER_Traslational_controller_private_h_
+#define RTW_HEADER_Traslational_controller_private_h_
 #include "rtwtypes.h"
 #include "multiword_types.h"
-#endif                                 /* RTW_HEADER_traslational_controller_private_h_ */
+
+/* Private macros used by the generated code to access rtModel */
+#ifndef rtmIsMajorTimeStep
+# define rtmIsMajorTimeStep(rtm)       (((rtm)->Timing.simTimeStep) == MAJOR_TIME_STEP)
+#endif
+
+#ifndef rtmIsMinorTimeStep
+# define rtmIsMinorTimeStep(rtm)       (((rtm)->Timing.simTimeStep) == MINOR_TIME_STEP)
+#endif
+
+#ifndef rtmGetTPtr
+# define rtmGetTPtr(rtm)               ((rtm)->Timing.t)
+#endif
+
+#ifndef rtmSetTPtr
+# define rtmSetTPtr(rtm, val)          ((rtm)->Timing.t = (val))
+#endif
+
+/* private model entry point functions */
+extern void Traslational_controller_derivatives();
+
+#endif                                 /* RTW_HEADER_Traslational_controller_private_h_ */

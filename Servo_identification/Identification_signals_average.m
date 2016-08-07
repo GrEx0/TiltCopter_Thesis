@@ -139,3 +139,18 @@ data = iddata(crop_data,value_signal,Ts,'InterSample','zoh');
     xlabel('Times (sec)')
     title(['Cross-validation - R_T^2= ',num2str(esti.RT2,3)])
     set(gca,'FontSize',14,'FontName','helvetica');
+    
+    
+    %% Modello finale identificato
+       
+    B0 =ureal('B0',4670.252,'PlusMinus',72.11);
+    B2 =ureal('B2',28.36,'PlusMinus',1.68);
+    B3 =ureal('B3',598.45,'PlusMinus',7.97);
+    B4 =ureal('B4',4650.23,'PlusMinus',1.55);
+    
+    num_i = B0;
+    den_i = [1 B2 B3 B4];
+    G_i = tf(num_i,den_i);
+     bode(G_i)
+    G_i_zpk = zpk(G_i);
+    

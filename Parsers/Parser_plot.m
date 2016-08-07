@@ -13,7 +13,7 @@ close all
 LOG_PARSER = 'logParser.jar';
 LOGS_FOLDER = 'parsed_logs';
 
-LOG_NAME = 'RBS_IDENT_4_deltaTH2';
+LOG_NAME = 'test_10';
 LOG_TYPE = '.txt';
 LOG_FOLDER = strcat(LOGS_FOLDER,'/',LOG_NAME);
 LOG_FILE = strcat(LOG_NAME,LOG_TYPE);

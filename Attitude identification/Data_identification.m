@@ -3,15 +3,21 @@
 % estimation of the unknowns 
 close all;
 clear all;
+clc
 
-EXPERIMENTAL_DATA = 'RBS_IDENT_1_deltaTH3';     % Data you want to do the estimation with
+%% System parameters 
+
+EXPERIMENTAL_DATA = 'RBS_h_deltaTH1_290716';     % Data you want to do the estimation with
+start_sample = 1600;                   % Sample from you wish to start identifying
 Ts = 0.01                              %Sampling time
+tau_f = 1/30;                         % FIlter constant use 30 or 100
 
 % Analytical model
 m = 1.900                             %[Kg] Mass of the tiltrotor
 g = 9.81;                             %[m/s^2] gravity acceleration
 b = 0.55/2;                           %[m] length of the arm
 Jxx = 0.034736;                       % Inertia on X axis, taken from identified Quadcopter
+
 %Propellers information
 nb = 2;                               %[1] Number of blades
 D = 12*(0.0254);                      %[m] Propeller diameter
@@ -24,12 +30,15 @@ ro = 1.225;                           %[kg*m^-3] Air density
 nb = 2;                               %[1] Number of blades
 Ct = 0.011859;                        %[1] Thrust coefficent
 Kt = Ct*ro*A*R^2;
-omega_hover = sqrt((m*g/Kt)/4);       % [rad/s] Angular velocity at Hovering 
+%omega_hover = sqrt((m*g/Kt)/4);       % [rad/s] Angular velocity at Hovering 
+x1 = [6.0312 80.4859]; 
+omega_hover = 50*x1(1)+x1(2);
 Cl_alpha = 2*pi;
 dCt_dp = Cl_alpha *sigma * 1/(R*omega_hover) * 1/8 *b;
 stab_der_L = -2 * ro * A * R^2 *omega_hover^2 * dCt_dp*b            % Stability derivative on roll axis
 
-% State space system definition
+%% Analytical model state space system definition
+
 A = [stab_der_L *1/Jxx 0 ; 1 0 ];
 B = [4*Kt*b*omega_hover*1/Jxx; 0 ];
 C = [1 0;0 1];
@@ -50,9 +59,12 @@ gain_p = 4*Kt*b*omega_hover*1/Jxx;
 den_p  = [1 -1/Jxx*stab_der_L] 
 G_p = tf(gain_p,den_p);
 roll_ss_phi = roll_ss(2);       % Transfer function from Input dOmega -> roll angle phi
-bode(roll_ss_p);grid;           % Bode plot of the TF -> bandwith about
 
-%% Identification
+if 1
+bode(roll_ss_p);grid;           % Bode plot of the TF -> bandwith about
+figure;bode(G_p);grid;
+end
+%% Data conditioning
 
 % Input/Output data from the identification campaign
 load(EXPERIMENTAL_DATA);
@@ -61,95 +73,92 @@ load(EXPERIMENTAL_DATA);
 m_th = 0.1;
 q_th = -100;
 control_motor_4 = mixer_ctr_motor_4*m_th + q_th;
-figure; plot(control_motor_4);title('Control input motor 4')
+%figure; plot(control_motor_4);title('Control input motor 4')
 control_motor_2 = mixer_ctr_motor_2*m_th + q_th;
-figure;plot(control_motor_2);title('Control input motor 2')
+%figure;plot(control_motor_2);title('Control input motor 2')
 
 % We are interested in delta_omega sent to the motors;
-delta_omega_ctr = control_motor_4 - control_motor_2 ; 
-figure;plot(delta_omega_ctr);title('deltaTH%')
+delta_omega_ctr = control_motor_4 - control_motor_2 ;
+
+%% Noise reduction 
+u = delta_omega_ctr; 
+y = imu_raw_gyro_x(1:length(u));
+
+if 1 
+    figure;
+    plot(y);
+    title('unfiltered data output');
+end
+
+t  = .01 * [0:numel(u)-1];
+num_f = [1];
+den_f = [tau_f 1]
+G_f   = tf(num_f,den_f)
+
+y_f = lsim(G_f,y,t);
+u_f = lsim(G_f,u,t);
+
+
+if 1                % Enable filter vs non filtered output
+  figure;
+  plot(t,y,t,y_f);
+  title('Filtered output vs NON filtered');
+end
+
+if 0               % Enable filter vs non filtered input
+  figure;
+  plot(t,u,t,u_f);
+  title('Filtered input vs NON filtered');
+end
+ 
+% Delay correction
+     %y = y_f(5:end);
+    % u=u_f(1:end-4);
+y = y_f;
+%u = u_f;
+    u=u(start_sample:end);
+    y=y(start_sample:end);    
+  
+% normalizza e rimuove media
+    u = u - mean(u);  
+    y = y - mean(y);
+    scal_u = norm(u);
+    scal_y = norm(y); 
+    u = 1/scal_u * u;
+    y = 1/scal_y * y;
+   
+    figure;plot(u);title('Normalized input u')  
+    figure;plot(y);title('Normalized output y')  
+
 % Conversion to deltaOmega [rad/s]
-x1 = [6.0312 80.4859];                                      %RAD/S vs THROTTLE: Y [RAD/S] = m*X[TH%] + q; x1 = [m q]
-delta_omega_ctr = delta_omega_ctr*x1(1) +x1(2);
-delta_omega_ctr = delta_omega_ctr;
-figure; plot(delta_omega_ctr);title('deltaOmega [rad/s]');
-
-%% Spectral analysis of PRBS signal
-
-signal = delta_omega_ctr;
-fftout=fft(signal);                     % Spectral (complex) vector
-N = length(delta_omega_ctr);    
-fs = 1/Ts;                              % Sampling frequency
-T = (N-1)*Ts;
-fnyquist = fs/2;                        % Nyquist frequency
-df=1/T;                                 % Spectral resolution
-
-vett_freq=0:df:fnyquist;
-mod_y(1)=1/N*abs(fftout(1))             % Mean value
-mod_y(2:N/2)=2/N*abs(fftout(2:N/2));    % Normalized module
-
-% SPECTRUM PLOT
-figure
-semilogx(vett_freq,mod_y);grid;xlabel('[]');ylabel('[]');title('Spectrum - Module of PBRS');
-
-X_mags = abs(fft(signal));
-bin_vals = [0 : N-1];
-fax_Hz = bin_vals*fs/N;
-N_2 = ceil(N/2);
-figure;
-semilogx(fax_Hz(1:N_2), 20*log10(X_mags(1:N_2)))
-xlabel('Frequency (Hz)')
-ylabel('Power (dB)');
-title({'Single-sided Power spectrum of PBRS' ...
-    ' (Frequency in shown on a log scale)'});
-axis tight
-
-
-%% Identification - greyest - FULL STATE SPACE (2x2)
-
-% y = imu_raw_gyro_x(1:(length(imu_raw_gyro_x)-1));
-y = [ deg2rad(onboard_attitude_roll) imu_raw_gyro_x(1:(length(imu_raw_gyro_x)-1)) ];
-u = delta_omega_ctr;
-data = iddata(y,u,Ts);
-data.InputName = 'deltaOmega';
-data.InputUnit = 'rad/s';
-data.OutputName = {'Roll angle', 'Roll rate'};
-data.OutputUnit = {'rad', 'rad/s'};
-data.Tstart = 0;
-data.TimeUnit = 's';
-%  nn = [1 1 0];
-%  Msrivc = srivc(data,nn);
-%  present(Msrivc);
-%   %compare the model output with the measured output
-%   figure;
-%   comparec(data,Msrivc);
-
-parameters = {'Stability derivative L',stab_der_L;'Inertia',Jxx;'Kt',Kt;'Arm length',b;'Omega hovering',omega_hover};
-fcn_type = 'cd';
-init_sys = idgrey('Roll_dynamics',parameters,fcn_type);
-
-% Fixed parameters (those that you don't want to estimate)
-init_sys.Structure.Parameters(3).Free = false;
-init_sys.Structure.Parameters(4).Free = false;
-init_sys.Structure.Parameters(5).Free = false;
+% x1 = [6.0312 80.4859];                                      %RAD/S vs THROTTLE: Y [RAD/S] = m*X[TH%] + q; x1 = [m q]
+% delta_omega_ctr = delta_omega_ctr*x1(1);
+% delta_omega_ctr = delta_omega_ctr;
+% figure; plot(delta_omega_ctr);title('deltaOmega [rad/s]');
 
 %% 
-% Estimate stab_der_L and Jxx. 
+% % Estimate A1 and B1 parameters
 opt = greyestOptions;
 opt.InitialState = 'auto';
 opt.DisturbanceModel = 'auto';
-opt.Focus = 'prediction';
+opt.Focus = 'simulation';
 opt.SearchMethod = 'auto';
-sys = greyest(data,init_sys,opt); 
-
-% Analyze the result. 
 opt_compare = compareOptions('InitialCondition','zero');
-figure;
-compare(data,sys,Inf,opt_compare)   
+%  sys = greyest(data,init_sys,opt); 
+% 
+% % Analyze the result. 
+% %
+%  figure;
+% compare(data,sys,Inf,opt_compare)   
 
 %% Identification greyest - single fdt (only the fdt from dOmega -> p is considered)
+fcn_type = 'c';
 dLdu_g = 4*Kt*b*omega_hover;
-y = imu_raw_gyro_x(1:(length(imu_raw_gyro_x)-1));
+
+% parameter guess
+A1 =  stab_der_L/Jxx;
+B1 = dLdu_g/Jxx;
+ 
 data_single = iddata(y,u,Ts);
 data_single.InputName = 'deltaOmega';
 data_single.InputUnit = 'rad/s';
@@ -159,12 +168,50 @@ data_single.Tstart = 0;
 data_single.TimeUnit = 's';
 
 % Again, you want to estimate the stability derivative and the inertia Jxx
-parameters = {'Stability derivative L',stab_der_L;'Inertia',Jxx;'dLdu_g',dLdu_g};
+% parameters = {'A1',A1;'B1',B1};
+parameters = {'stab_der_L',stab_der_L;'Jxx',Jxx;'dLdu_g',dLdu_g};
+
 init_sys_single = idgrey('Roll_dynamics_single',parameters,fcn_type);
-init_sys.Structure.Parameters(3).Free = false;
+init_sys_single.Structure.Parameters(3).Free = false;
 
 sys_single = greyest(data_single,init_sys_single,opt);
 figure;
-compare(data_single,sys_single,Inf,opt_compare)
+compare(data_single,sys_single,Inf,opt_compare);
 
+% VAF computation
+t  = .01 * [0:numel(u)-1];
+yi = lsim(sys_single,u,t);
+vaf_grey = vaf(y,yi);
+figure;
+plot(t,y,t,yi);
+title('Real output VS Model output');
 
+% SRIVC Identification
+ nn = [1 1 0];
+ Msrivc = tdsrivc(data_single,nn);
+ present(Msrivc);
+  %compare the model output with the measured output
+  figure;
+  comparec(data_single,Msrivc);
+  yi_srivc = lsim(Msrivc,u,t);
+  vaf_srivc= vaf(y,yi_srivc);
+  if 0
+      figure;
+      plot(t,y,t,yi);
+      title('Real output VS Model output SRIVC');
+  end
+ % Present results
+fprintf('VAF GREY : %2f  VAF SRIVC %2f \n',round(vaf_grey,2),round(vaf_srivc,2));
+%grey est
+res_grey = getpvec(sys_single);
+fprintf('A1 grey:%3f , B1 grey: %3f \n',res_grey(1),res_grey(2));
+res_cov_grey =getcov(sys_single); 
+fprintf('A1 var:%3f , B1 var: %3f \n',res_cov_grey(1,1),res_cov_grey(2,2));
+
+%srivc
+res_grey = getpvec(Msrivc);
+fprintf('A1 srivc:%3f , B2 srivc: %3f \n',res_grey(1),res_grey(2));
+res_cov_grey =getcov(Msrivc); 
+fprintf('A1S var:%3f , B2s var: %3f \n',res_cov_grey(1,1),res_cov_grey(2,2));
+  
+  

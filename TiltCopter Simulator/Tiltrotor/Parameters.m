@@ -212,7 +212,13 @@ Kba = sqrt(KaD/KaI);
 sata = 5;
 
 %% Traslational Controller
-Kp_v = 19;
-Kp_u = 19;
-
+% Kp_v = 19;
+% Kp_u = 19;
+% con 10 risultati discreti
+Kp_v = 8;
+Kp_u = 8;
+Ki_v = 6;
+Ki_u = 6;
+umax = 0.5;
+vmax = 0.5;
  %% End of code

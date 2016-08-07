@@ -1,14 +1,21 @@
 function CodeDefine() { 
 this.def = new Array();
-this.def["step"] = {file: "traslational_controller_cpp.html",line:25,type:"fcn"};
-this.def["initialize"] = {file: "traslational_controller_cpp.html",line:47,type:"fcn"};
-this.def["terminate"] = {file: "traslational_controller_cpp.html",line:64,type:"fcn"};
-this.def["getRTM"] = {file: "traslational_controller_cpp.html",line:92,type:"fcn"};
-this.def["ExtU_traslational_controller_T"] = {file: "traslational_controller_h.html",line:51,type:"type"};
-this.def["ExtY_traslational_controller_T"] = {file: "traslational_controller_h.html",line:57,type:"type"};
-this.def["traslational_controller_U"] = {file: "traslational_controller_h.html",line:90,type:"var"};
-this.def["P_traslational_controller_T"] = {file: "traslational_controller_types_h.html",line:27,type:"type"};
-this.def["RT_MODEL_traslational_control_T"] = {file: "traslational_controller_types_h.html",line:30,type:"type"};
+this.def["rt_ertODEUpdateContinuousStates"] = {file: "Traslational_controller_cpp.html",line:28,type:"fcn"};
+this.def["step"] = {file: "Traslational_controller_cpp.html",line:73,type:"fcn"};
+this.def["Traslational_controller_derivatives"] = {file: "Traslational_controller_cpp.html",line:210,type:"fcn"};
+this.def["initialize"] = {file: "Traslational_controller_cpp.html",line:224,type:"fcn"};
+this.def["terminate"] = {file: "Traslational_controller_cpp.html",line:301,type:"fcn"};
+this.def["getRTM"] = {file: "Traslational_controller_cpp.html",line:365,type:"fcn"};
+this.def["B_Traslational_controller_T"] = {file: "Traslational_controller_h.html",line:153,type:"type"};
+this.def["X_Traslational_controller_T"] = {file: "Traslational_controller_h.html",line:159,type:"type"};
+this.def["XDot_Traslational_controller_T"] = {file: "Traslational_controller_h.html",line:165,type:"type"};
+this.def["XDis_Traslational_controller_T"] = {file: "Traslational_controller_h.html",line:171,type:"type"};
+this.def["ODE2_IntgData"] = {file: "Traslational_controller_h.html",line:180,type:"type"};
+this.def["ExtU_Traslational_controller_T"] = {file: "Traslational_controller_h.html",line:189,type:"type"};
+this.def["ExtY_Traslational_controller_T"] = {file: "Traslational_controller_h.html",line:195,type:"type"};
+this.def["Traslational_controller_U"] = {file: "Traslational_controller_h.html",line:313,type:"var"};
+this.def["P_Traslational_controller_T"] = {file: "Traslational_controller_types_h.html",line:27,type:"type"};
+this.def["RT_MODEL_Traslational_control_T"] = {file: "Traslational_controller_types_h.html",line:30,type:"type"};
 this.def["long_T"] = {file: "multiword_types_h.html",line:28,type:"type"};
 this.def["int64m_T"] = {file: "multiword_types_h.html",line:35,type:"type"};
 this.def["cint64m_T"] = {file: "multiword_types_h.html",line:40,type:"type"};
@@ -272,14 +279,14 @@ var isPC = true;
 function Html2SrcLink() {
 	this.html2SrcPath = new Array;
 	this.html2Root = new Array;
-	this.html2SrcPath["traslational_controller_cpp.html"] = "../traslational_controller.cpp";
-	this.html2Root["traslational_controller_cpp.html"] = "traslational_controller_cpp.html";
-	this.html2SrcPath["traslational_controller_h.html"] = "../traslational_controller.h";
-	this.html2Root["traslational_controller_h.html"] = "traslational_controller_h.html";
-	this.html2SrcPath["traslational_controller_private_h.html"] = "../traslational_controller_private.h";
-	this.html2Root["traslational_controller_private_h.html"] = "traslational_controller_private_h.html";
-	this.html2SrcPath["traslational_controller_types_h.html"] = "../traslational_controller_types.h";
-	this.html2Root["traslational_controller_types_h.html"] = "traslational_controller_types_h.html";
+	this.html2SrcPath["Traslational_controller_cpp.html"] = "../Traslational_controller.cpp";
+	this.html2Root["Traslational_controller_cpp.html"] = "Traslational_controller_cpp.html";
+	this.html2SrcPath["Traslational_controller_h.html"] = "../Traslational_controller.h";
+	this.html2Root["Traslational_controller_h.html"] = "Traslational_controller_h.html";
+	this.html2SrcPath["Traslational_controller_private_h.html"] = "../Traslational_controller_private.h";
+	this.html2Root["Traslational_controller_private_h.html"] = "Traslational_controller_private_h.html";
+	this.html2SrcPath["Traslational_controller_types_h.html"] = "../Traslational_controller_types.h";
+	this.html2Root["Traslational_controller_types_h.html"] = "Traslational_controller_types_h.html";
 	this.html2SrcPath["multiword_types_h.html"] = "../multiword_types.h";
 	this.html2Root["multiword_types_h.html"] = "multiword_types_h.html";
 	this.html2SrcPath["rtwtypes_h.html"] = "../rtwtypes.h";
@@ -301,4 +308,4 @@ function Html2SrcLink() {
 }
 Html2SrcLink.instance = new Html2SrcLink();
 var fileList = [
-"traslational_controller_cpp.html","traslational_controller_h.html","traslational_controller_private_h.html","traslational_controller_types_h.html","multiword_types_h.html","rtwtypes_h.html","rtmodel_h.html"];
+"Traslational_controller_cpp.html","Traslational_controller_h.html","Traslational_controller_private_h.html","Traslational_controller_types_h.html","multiword_types_h.html","rtwtypes_h.html","rtmodel_h.html"];

@@ -3,9 +3,9 @@
  *
  * Code generation for model "Mixer".
  *
- * Model version              : 1.19
+ * Model version              : 1.20
  * Simulink Coder version : 8.8 (R2015a) 09-Feb-2015
- * C++ source code generated on : Tue Jun 14 15:54:18 2016
+ * C++ source code generated on : Wed Jun 29 11:32:59 2016
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -31,6 +31,7 @@ void MixerModelClass::step()
   real_T rtb_Gain2_0;
 
   /* SignalConversion: '<S1>/TmpSignal ConversionAtGain2Inport1' incorporates:
+   *  Gain: '<S1>/Gain'
    *  Inport: '<Root>/Fx'
    *  Inport: '<Root>/Fy'
    *  Inport: '<Root>/L'
@@ -40,7 +41,7 @@ void MixerModelClass::step()
    */
   tmp[0] = Mixer_U.Fx;
   tmp[1] = Mixer_U.Fy;
-  tmp[2] = Mixer_U.T;
+  tmp[2] = Mixer_P.Gain_Gain * Mixer_U.T;
   tmp[3] = Mixer_U.L;
   tmp[4] = Mixer_U.M;
   tmp[5] = Mixer_U.N;
@@ -310,6 +311,9 @@ MixerModelClass::MixerModelClass()
      *   '<S1>/Gain3'
      */
     { 6.0312, 80.4859 },
+    -1.0,                              /* Expression: -1
+                                        * Referenced by: '<S1>/Gain'
+                                        */
     100.0,                             /* Expression: 100
                                         * Referenced by: '<S1>/Saturation1'
                                         */

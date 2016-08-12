@@ -23,28 +23,43 @@ m_r =  0.13;                         %[Kg] Mass of the rotor group
 % Iyy = Ixx;                              %[kg*m^2] Estimated Inertia around Ybody axes
 % Izz = m_c*r_c^2/2 +m_r*b^2;             %[kg*m^2] Estimated Inertia around Zbody axes
 
-Ixx = 0.034736;                  %[kg*m^2] Inertia around Xbody axes
-Ixx_sigma = 0.0011563;           %[kg*m^2] Uncertainty of Inertia around Xbody axes
-Iyy = Ixx;                       %[kg*m^2] Inertia around Ybody axes
-Iyy_sigma = Ixx_sigma;           %[kg*m^2] Uncertainty of Inertia around Ybody axes
-Izz = 0.05;                      %[kg*m^2] Inertia around Zbody axes
+% OLD VALUES FROM QUADCOPTER
+% Ixx = 0.034736;                  %[kg*m^2] Inertia around Xbody axes
+ Ixx_sigma = 0.0011563;           %[kg*m^2] Uncertainty of Inertia around Xbody axes
+% Iyy = Ixx;                       %[kg*m^2] Inertia around Ybody axes
+ Iyy_sigma = Ixx_sigma;           %[kg*m^2] Uncertainty of Inertia around Ybody axes
+Izz = 0.05;                        %[kg*m^2] Inertia around Zbody axes
+Ixx = 14e-4;
+Iyy = Ixx;
 
 In = diag([Ixx Iyy Izz]);        %[kg*m^2] Inertia tensor
 InInv = In\eye(3);               %[kg^-1*m^-2] Inverse of inertia tensor
 
 %% Servomotor Model Parameters
-B0 = 1.399e04;
-B1 =    1150;
-B2 = 37.46;
-B3 = 1;
-ServoMotor_Gain = 1.409e04;
-B4 = 1.409e04;
+% B0 = 1.399e04;
+% B1 =    1150;
+% B2 = 37.46;
+% B3 = 1;
+% ServoMotor_Gain = 1.409e04;
+% B4 = 1.409e04;
+
+B0 = 4670.2519;
+B1 = 1;
+B2 = 28.355992;
+B3 = 598.45913;
+B4 = 4650.2325;
+
+% % State space representation  VECCHIA VERSIONE NON USARE
+% A_Servo = [0 1 0; 0 0 1 ; -B0/B3 -B1/B3 -B2/B3];
+% B_Servo = [0 ; 0 ; B0/B3];
+% C_Servo = eye(3);
+% D_Servo = 0 ; 
 
 % State space representation
-A_Servo = [0 1 0; 0 0 1 ; -B0/B3 -B1/B3 -B2/B3];
-B_Servo = [0 ; 0 ; B0/B3];
+A_Servo = [0 1 0; 0 0 1 ; -B4/B1 -B3/B1 -B2/B1];
+B_Servo = [0 ; 0 ; B0/B1];
 C_Servo = eye(3);
-D_Servo = 0 ; 
+D_Servo = 0 ;
 
 % Let's find a first order relationship y = mx + q
 x = [0 pi/4 -pi/4];
@@ -80,7 +95,8 @@ dMdu = 4*sqrt(2)*Kt*b*OMEhov;    %[Nm*s] Control derivative
 dMdu_sigma = (4*sqrt(2)*b*OMEhov)*Kt_sigma;
 
 %Aerodynamic damping
-dMdq = -0.046271;                %[Nm*s] Stability derivative of the vehicle pitch
+%dMdq = -0.046271;                %[Nm*s] Stability derivative of the vehicle pitch
+dMdq =-96e-4;
 dMdq_sigma = 0.0024164;          %[Nm*s] Uncertainty of stability derivative of the vehicle pitch
 dLdp = dMdq;
 dNdr = -0.0185;                  %[Nm*s] Stability derivative of the vehicle yaw
@@ -196,8 +212,14 @@ KRD = 0.00512;
 %H-Infinity
 KPP = 1.61;
 KPD = 0.00512;
-% KPP = 1.33;
-% KPD = 0.00696;
+
+%psi PD
+%Guess
+% KYP = 0.93;
+% KYD = 0.01;
+%H-Infinity
+KYP = 1.41;
+KYD = 0.216;
 
 %% Altitude regulator
 KaN = 38;
@@ -215,10 +237,15 @@ sata = 5;
 % Kp_v = 19;
 % Kp_u = 19;
 % con 10 risultati discreti
-Kp_v = 8;
-Kp_u = 8;
-Ki_v = 6;
-Ki_u = 6;
+N_tras = 150;
+% Kp_v = 10;
+% Kp_u = 10;
+Kp_v = 6;
+Kp_u = 6;
+Kd_v = 0.1;
+Kd_u = 0.1;
+% Ki_v = 6;
+% Ki_u = 6;
 umax = 0.5;
 vmax = 0.5;
  %% End of code

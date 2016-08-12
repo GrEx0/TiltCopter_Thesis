@@ -7,9 +7,9 @@
  *
  * Code generation for model "Traslational_controller".
  *
- * Model version              : 1.122
+ * Model version              : 1.127
  * Simulink Coder version : 8.10 (R2016a) 10-Feb-2016
- * C++ source code generated on : Fri Aug 05 17:29:59 2016
+ * C++ source code generated on : Mon Aug 08 17:49:40 2016
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -94,17 +94,19 @@ void Traslational_controllerModelClass::step()
       (&(&Traslational_controller_M)->solverInfo);
   }
 
-  /* Saturate: '<S1>/Saturation' incorporates:
-   *  Inport: '<Root>/u_des'
+  /* Gain: '<S1>/Gain2' incorporates:
+   *  Inport: '<Root>/v_des'
    */
-  if (Traslational_controller_U.u_des >
-      Traslational_controller_P.Saturation_UpperSat) {
+  rtb_Filter = Traslational_controller_P.Gain2_Gain *
+    Traslational_controller_U.v_des;
+
+  /* Saturate: '<S1>/Saturation' */
+  if (rtb_Filter > Traslational_controller_P.Saturation_UpperSat) {
     rtb_Filter = Traslational_controller_P.Saturation_UpperSat;
-  } else if (Traslational_controller_U.u_des <
-             Traslational_controller_P.Saturation_LowerSat) {
-    rtb_Filter = Traslational_controller_P.Saturation_LowerSat;
   } else {
-    rtb_Filter = Traslational_controller_U.u_des;
+    if (rtb_Filter < Traslational_controller_P.Saturation_LowerSat) {
+      rtb_Filter = Traslational_controller_P.Saturation_LowerSat;
+    }
   }
 
   /* Sum: '<S1>/Sum4' incorporates:
@@ -120,10 +122,9 @@ void Traslational_controllerModelClass::step()
    *  Integrator: '<S2>/Filter'
    *  Sum: '<S2>/SumD'
    */
-  Traslational_controller_B.FilterCoefficient =
-    (Traslational_controller_P.ucontroller_D * rtb_Filter -
-     Traslational_controller_X.Filter_CSTATE) *
-    Traslational_controller_P.ucontroller_N;
+  Traslational_controller_B.FilterCoefficient = (Traslational_controller_P.Kd_u *
+    rtb_Filter - Traslational_controller_X.Filter_CSTATE) *
+    Traslational_controller_P.N_tras;
 
   /* Outport: '<Root>/Fx' incorporates:
    *  Gain: '<S2>/Proportional Gain'
@@ -132,17 +133,19 @@ void Traslational_controllerModelClass::step()
   Traslational_controller_Y.Fx = Traslational_controller_P.Kp_u * rtb_Filter +
     Traslational_controller_B.FilterCoefficient;
 
-  /* Saturate: '<S1>/Saturation1' incorporates:
-   *  Inport: '<Root>/v_des'
+  /* Gain: '<S1>/Gain3' incorporates:
+   *  Inport: '<Root>/u_des'
    */
-  if (Traslational_controller_U.v_des >
-      Traslational_controller_P.Saturation1_UpperSat) {
+  rtb_Filter = Traslational_controller_P.Gain3_Gain *
+    Traslational_controller_U.u_des;
+
+  /* Saturate: '<S1>/Saturation1' */
+  if (rtb_Filter > Traslational_controller_P.Saturation1_UpperSat) {
     rtb_Filter = Traslational_controller_P.Saturation1_UpperSat;
-  } else if (Traslational_controller_U.v_des <
-             Traslational_controller_P.Saturation1_LowerSat) {
-    rtb_Filter = Traslational_controller_P.Saturation1_LowerSat;
   } else {
-    rtb_Filter = Traslational_controller_U.v_des;
+    if (rtb_Filter < Traslational_controller_P.Saturation1_LowerSat) {
+      rtb_Filter = Traslational_controller_P.Saturation1_LowerSat;
+    }
   }
 
   /* Sum: '<S1>/Sum1' incorporates:
@@ -159,9 +162,9 @@ void Traslational_controllerModelClass::step()
    *  Sum: '<S3>/SumD'
    */
   Traslational_controller_B.FilterCoefficient_m =
-    (Traslational_controller_P.vcontroller_D * rtb_Filter -
+    (Traslational_controller_P.Kd_v * rtb_Filter -
      Traslational_controller_X.Filter_CSTATE_j) *
-    Traslational_controller_P.vcontroller_N;
+    Traslational_controller_P.N_tras;
 
   /* Outport: '<Root>/Fy' incorporates:
    *  Gain: '<S3>/Proportional Gain'
@@ -307,23 +310,25 @@ void Traslational_controllerModelClass::terminate()
 Traslational_controllerModelClass::Traslational_controllerModelClass()
 {
   static const P_Traslational_controller_T Traslational_controller_P_temp = {
-    8.0,                               /* Variable: Kp_u
-                                        * Referenced by: '<S2>/Proportional Gain'
-                                        */
-    8.0,                               /* Variable: Kp_v
-                                        * Referenced by: '<S3>/Proportional Gain'
-                                        */
-    2.0,                               /* Mask Parameter: ucontroller_D
+    0.1,                               /* Variable: Kd_u
                                         * Referenced by: '<S2>/Derivative Gain'
                                         */
-    2.0,                               /* Mask Parameter: vcontroller_D
+    0.1,                               /* Variable: Kd_v
                                         * Referenced by: '<S3>/Derivative Gain'
                                         */
-    50.0,                              /* Mask Parameter: ucontroller_N
-                                        * Referenced by: '<S2>/Filter Coefficient'
+    6.0,                               /* Variable: Kp_u
+                                        * Referenced by: '<S2>/Proportional Gain'
                                         */
-    50.0,                              /* Mask Parameter: vcontroller_N
-                                        * Referenced by: '<S3>/Filter Coefficient'
+    6.0,                               /* Variable: Kp_v
+                                        * Referenced by: '<S3>/Proportional Gain'
+                                        */
+    150.0,                             /* Variable: N_tras
+                                        * Referenced by:
+                                        *   '<S2>/Filter Coefficient'
+                                        *   '<S3>/Filter Coefficient'
+                                        */
+    -1.0,                              /* Expression: -1
+                                        * Referenced by: '<S1>/Gain2'
                                         */
     1.0,                               /* Expression: 1
                                         * Referenced by: '<S1>/Saturation'
@@ -336,6 +341,9 @@ Traslational_controllerModelClass::Traslational_controllerModelClass()
                                         */
     0.0,                               /* Expression: InitialConditionForFilter
                                         * Referenced by: '<S2>/Filter'
+                                        */
+    -1.0,                              /* Expression: -1
+                                        * Referenced by: '<S1>/Gain3'
                                         */
     1.0,                               /* Expression: 1
                                         * Referenced by: '<S1>/Saturation1'

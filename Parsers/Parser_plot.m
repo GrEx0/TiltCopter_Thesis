@@ -13,7 +13,7 @@ close all
 LOG_PARSER = 'logParser.jar';
 LOGS_FOLDER = 'parsed_logs';
 
-LOG_NAME = 'test_10';
+LOG_NAME = 'test_volo_v1';
 LOG_TYPE = '.txt';
 LOG_FOLDER = strcat(LOGS_FOLDER,'/',LOG_NAME);
 LOG_FILE = strcat(LOG_NAME,LOG_TYPE);
@@ -28,10 +28,11 @@ clear SAVE_FILE_NAME;
 clear SAVE_FILE_TYPE;
 
 IMU_RAW_SUFFIX = '-IMU_RAW';
-ONBOARD_ATTITUDE_SUFFIX = '-ON_ATTITUDE';
-ONBOARD_ATTITUDE_Q_SUFFIX = '-ON_ATTITUDE_QUATER';
-ONBOARD_ALTITUDE_SUFFIX = '-ON_ALTITUDE';
-ONBOARD_POSITION_SUFFIX = '-ON_POSITION';
+O_ATTITUDE_SUFFIX = '-ON_ATTITUDE';
+O_ATTITUDE_Q_SUFFIX = '-ON_ATTITUDE_QUATER';
+O_ALTITUDE_SUFFIX = '-ON_ALTITUDE';
+O_POSITION_BODY_SUFFIX = '-ON_POSITION_BODY';
+O_POSITION_NED_SUFFIX = '-ON_POSITION_NED';
 BAROMETER_SUFFIX = '-BARO';
 GPS_SUFFIX = '-GPS';
 RADIO_SUFFIX = '-RADIO';
@@ -39,21 +40,11 @@ MIXER_CTR_SUFFIX = '-MIXER_CTR';
 ATTITUDE_CTR_SUFFIX = '-ATTITUDE_CTR';
 ALTITUDE_CTR_SUFFIX = '-ALTITUDE_CTR';
 POSITION_CTR_SUFFIX = '-POSITION_CTR';
-GROUND_ATTITUDE_SUFFIX = '-GND_ATTITUDE';
-GROUND_POSITION_SUFFIX = '-GND_POSITION';
-WAYPOINT_DELTA_SUFFIX = '-WAYPOINT';
+G_ATTITUDE_SUFFIX = '-GND_ATTITUDE';
+G_POSITION_SUFFIX = '-GND_POSITION';
+WAYPOINT_SUFFIX = '-WAYPOINT';
 HEARTBEAT_SUFFIX = '-HEARTBEAT';
 
-%% Imu Raw scale factor
-
-%Gyroscope
-%imu_raw_gyro_scale = diag([0.00032947 0.00033315 0.00031014]);
-%Accelerometer
-%imu_raw_acc_scale = diag([0.0093684 0.009644 0.0099314]);
-%imu_raw_acc_bias = diag([0.05588 -0.024584 0.3292]);
-%Magnetometer
-%imu_raw_mag_scale = diag([0.00284 0.0027798 0.0030678]);
-%imu_raw_mag_bias = diag([0.23112 0.14511 -0.32205]);
 
 %% Parsing
 
@@ -61,6 +52,7 @@ system(LOG_CMD);
 clear LOG_CMD;
 clear LOG_FILE;
 clear LOG_PARSER;
+
 %% Import data logged
 
 cd(LOG_FOLDER)
@@ -73,11 +65,7 @@ disp('Stored Data:');
 try
     imu_raw_file = strcat(LOG_NAME,IMU_RAW_SUFFIX,LOG_TYPE);
     imu_raw_data = dlmread(imu_raw_file);
-    
-    %imu_raw_acc = imu_raw_data(:,1:3) * imu_raw_acc_scale - ones(length(imu_raw_data),3)*imu_raw_acc_bias;
-    %imu_raw_gyro = imu_raw_data(:,4:6) * imu_raw_gyro_scale;
-    %imu_raw_mag = imu_raw_data(:,7:9) * imu_raw_mag_scale - ones(length(imu_raw_data),3)*imu_raw_mag_bias;
-    
+
     imu_raw_acc_x = imu_raw_data(:,1);
     imu_raw_acc_y = imu_raw_data(:,2);
     imu_raw_acc_z = imu_raw_data(:,3);
@@ -92,7 +80,6 @@ try
    
     imu_raw_state = imu_raw_data(:,10);
     
-    %disp(strcat(IMU_RAW_SUFFIX,'(imu_raw_acc, imu_raw_gyro, imu_raw_mag, imu_raw_state)'));
     disp(strcat(IMU_RAW_SUFFIX,'(imu_raw_acc_x,imu_raw_acc_y, imu_raw_acc_z, imu_raw_gyro_x, imu_raw_gyro_y, imu_raw_gyro_z, imu_raw_mag_x, imu_raw_mag_y, imu_raw_mag_z, imu_raw_state)'));
 
 catch
@@ -101,85 +88,97 @@ end
 clear IMU_RAW_SUFFIX;
 clear imu_raw_data;
 clear imu_raw_file;
-clear imu_raw_acc_scale;
-clear imu_raw_acc_bias;
-clear imu_raw_gyro_scale;
-clear imu_raw_gyro_bias;
-clear imu_raw_mag_scale;
-clear imu_raw_mag_bias;
 
 try
-    onboard_attitude_file = strcat(LOG_NAME,ONBOARD_ATTITUDE_SUFFIX,LOG_TYPE);
-    onboard_attitude_data = dlmread(onboard_attitude_file);
+    o_attitude_file = strcat(LOG_NAME,O_ATTITUDE_SUFFIX,LOG_TYPE);
+    o_attitude_data = dlmread(o_attitude_file);
     
-    onboard_attitude_roll = onboard_attitude_data(:,1);
-    onboard_attitude_pitch = onboard_attitude_data(:,2);
-    onboard_attitude_yaw = onboard_attitude_data(:,3);
-    onboard_attitude_p = onboard_attitude_data(:,4);
-    onboard_attitude_q = onboard_attitude_data(:,5);
-    onboard_attitude_r = onboard_attitude_data(:,6);
-    onboard_attitude_state = onboard_attitude_data(:,7);
+    o_attitude_roll = o_attitude_data(:,1);
+    o_attitude_pitch = o_attitude_data(:,2);
+    o_attitude_yaw = o_attitude_data(:,3);
+    o_attitude_p = o_attitude_data(:,4);
+    o_attitude_q = o_attitude_data(:,5);
+    o_attitude_r = o_attitude_data(:,6);
+    o_attitude_state = o_attitude_data(:,7);
 
-    disp(strcat(ONBOARD_ATTITUDE_SUFFIX,'(onboard_attitude_roll, onboard_attitude_pitch, onboard_attitude_yaw, onboard_attitude_p, onboard_attitude_q, onboard_attitude_r,onboard_attitude_state)'));
+    disp(strcat(O_ATTITUDE_SUFFIX,'(o_attitude_roll, o_attitude_pitch, o_attitude_yaw, o_attitude_p, o_attitude_q, o_attitude_r,o_attitude_state)'));
 catch
 end
 
-clear ONBOARD_ATTITUDE_SUFFIX;
-clear onboard_attitude_file;
-clear onboard_attitude_data;
+clear O_ATTITUDE_SUFFIX;
+clear o_attitude_file;
+clear o_attitude_data;
 
 try
-    onboard_attitude_q_file = strcat(LOG_NAME,ONBOARD_ATTITUDE_Q_SUFFIX,LOG_TYPE);
-    onboard_attitude_q_data = dlmread(onboard_attitude_q_file);
+    o_attitude_q_file = strcat(LOG_NAME,O_ATTITUDE_Q_SUFFIX,LOG_TYPE);
+    o_attitude_q_data = dlmread(o_attitude_q_file);
     
-    onboard_attitude_q_vector = onboard_attitude_q_data(:,1:4);
-    onboard_attitude_q_bias = onboard_attitude_q_data(:,5:7);
-    onboard_attitude_q_state = onboard_attitude_q_data(:,8);
+    o_attitude_q_vector = o_attitude_q_data(:,1:4);
+    o_attitude_q_bias = o_attitude_q_data(:,5:7);
+    o_attitude_q_state = o_attitude_q_data(:,8);
     
-    disp(strcat(ONBOARD_ATTITUDE_Q_SUFFIX,'(onboard_attitude_q_vector, onboard_attitude_q_bias,onboard_attitude_q_state)'));
+    disp(strcat(O_ATTITUDE_Q_SUFFIX,'(o_attitude_q_vector, o_attitude_q_bias,o_attitude_q_state)'));
 catch  
 end
 
-clear onboard_attitude_q_file;
-clear onboard_attitude_q_data;
-clear ONBOARD_ATTITUDE_Q_SUFFIX;
+clear o_attitude_q_file;
+clear o_attitude_q_data;
+clear O_ATTITUDE_Q_SUFFIX;
 
 try
-    onboard_position_file = strcat(LOG_NAME,ONBOARD_POSITION_SUFFIX,LOG_TYPE);
-    onboard_position_data = dlmread(onboard_position_file);
+    o_position_body_file = strcat(LOG_NAME,O_POSITION_BODY_SUFFIX,LOG_TYPE);
+    o_position_body_data = dlmread(o_position_body_file);
     
-    onboard_position_dist_north = onboard_position_data(:,1);
-    onboard_position_u = onboard_position_data(:,2);
-    onboard_position_acc_north = onboard_position_data(:,3);
-    onboard_position_dist_east = onboard_position_data(:,4);
-    onboard_position_v = onboard_position_data(:,5);
-    onboard_position_acc_east = onboard_position_data(:,6);
-    onboard_position_state = onboard_position_data(:,7);
+    o_position_body_x = o_position_body_data(:,1);
+    o_position_body_u = o_position_body_data(:,2);
+    o_position_body_u_dot = o_position_body_data(:,3);
+    o_position_body_y = o_position_body_data(:,4);
+    o_position_body_v = o_position_body_data(:,5);
+    o_position_body_v_dot = o_position_body_data(:,6);
+    o_position_body_state = o_position_body_data(:,7);
 
-    disp(strcat(ONBOARD_POSITION_SUFFIX,'(onboard_position_dist_north, onboard_position_u,gps_lon, onboard_position_acc_north, onboard_position_dist_east, onboard_position_v, onboard_position_acc_east, onboard_position_state)'));
+    disp(strcat(O_POSITION_BODY_SUFFIX,'(o_position_body_x, o_position_body_u,o_position_body_u_dot, o_position_body_y, o_position_body_v, o_position_body_v_dot, o_position_body_state)'));
 catch    
 end
 
-clear onboard_position_file;
-clear onboard_position_data;
-clear ONBOARD_POSITION_SUFFIX;
+clear o_position_body_file;
+clear o_position_body_data;
+clear O_POSITION_BODY_SUFFIX;
+
 
 try
-    onboard_altitude_file = strcat(LOG_NAME,ONBOARD_ALTITUDE_SUFFIX,LOG_TYPE);
-    onboard_altitude_data = dlmread(onboard_altitude_file);
+    o_position_ned_file = strcat(LOG_NAME,O_POSITION_NED_SUFFIX,LOG_TYPE);
+    o_position_ned_data = dlmread(o_position_ned_file);
     
-    onboard_altitude_dist_z = onboard_altitude_data(:,1);
-    onboard_altitude_w = onboard_altitude_data(:,2);
-    onboard_altitude_acc_z = onboard_altitude_data(:,3);
-    onboard_altitude_state = onboard_altitude_data(:,4);
+    o_position_ned_n = o_position_ned_data(:,1);
+    o_position_ned_e = o_position_ned_data(:,2);
+    o_position_ned_d = o_position_ned_data(:,3);
+    o_position_ned_state = o_position_ned_data(:,4);
+
+    disp(strcat(O_POSITION_NED_SUFFIX,'(o_position_ned_n, o_position_ned_e,o_position_ned_d,o_position_ned_state)'));
+catch    
+end
+
+clear o_position_ned_file;
+clear o_position_ned_data;
+clear O_POSITION_NED_SUFFIX;
+
+try
+    o_altitude_file = strcat(LOG_NAME,O_ALTITUDE_SUFFIX,LOG_TYPE);
+    o_altitude_data = dlmread(o_altitude_file);
     
-    disp(strcat(ONBOARD_ALTITUDE_SUFFIX,'(onboard_altitude_dist_z, onboard_altitude_w,onboard_altitude_acc_z, onboard_altitude_state)'));
+    o_altitude_z = o_altitude_data(:,1);
+    o_altitude_w = o_altitude_data(:,2);
+    o_altitude_w_dot = o_altitude_data(:,3);
+    o_altitude_state = o_altitude_data(:,4);
+    
+    disp(strcat(O_ALTITUDE_SUFFIX,'(o_altitude_z, o_altitude_w,o_altitude_w_dot, o_altitude_state)'));
 catch
 end
 
-clear onboard_altitude_file
-clear onboard_altitude_data
-clear ONBOARD_ALTITUDE_SUFFIX;
+clear o_altitude_file
+clear o_altitude_data
+clear O_ALTITUDE_SUFFIX;
 
 try
     barometer_file = strcat(LOG_NAME,BAROMETER_SUFFIX,LOG_TYPE);
@@ -255,13 +254,13 @@ try
     
     position_ctr_var_r = position_ctr_data(:,1);
     position_ctr_var_p = position_ctr_data(:,2);
-    position_ctr_ref_north = position_ctr_data(:,3);
-    position_ctr_ref_east = position_ctr_data(:,4);
+    position_ctr_ref_n = position_ctr_data(:,3);
+    position_ctr_ref_e = position_ctr_data(:,4);
     position_ctr_ref_yaw = position_ctr_data(:,5);
     position_ctr_state = position_ctr_data(:,6);
     
         
-    disp(strcat(POSITION_CTR_SUFFIX,'(position_ctr_var_r,position_ctr_var_p,position_ctr_ref_north,position_ctr_ref_east,position_ctr_ref_yaw,position_ctr_state)'));        
+    disp(strcat(POSITION_CTR_SUFFIX,'(position_ctr_var_r,position_ctr_var_p,position_ctr_ref_n,position_ctr_ref_e,position_ctr_ref_yaw,position_ctr_state)'));        
 catch   
 end
 
@@ -335,58 +334,61 @@ clear heartbeat_data;
 clear HEARTBEAT_SUFFIX;
 
 try
-    ground_attitude_file = strcat(LOG_NAME,GROUND_ATTITUDE_SUFFIX,LOG_TYPE);
-    ground_attitude_data = dlmread(ground_attitude_file);
+    g_attitude_file = strcat(LOG_NAME,G_ATTITUDE_SUFFIX,LOG_TYPE);
+    g_attitude_data = dlmread(g_attitude_file);
     
-    ground_attitude_roll = ground_attitude_data(:,1);
-    ground_attitude_pitch = ground_attitude_data(:,2);
-    ground_attitude_yaw = ground_attitude_data(:,3);
-    ground_attitude_state = ground_attitude_data(:,4);
+    g_attitude_roll = g_attitude_data(:,1);
+    g_attitude_pitch = g_attitude_data(:,2);
+    g_attitude_yaw = g_attitude_data(:,3);
+    g_attitude_state = g_attitude_data(:,4);
     
-    disp(strcat(GROUND_ATTITUDE_SUFFIX,'(ground_attitude_roll, ground_attitude_pitch, ground_attitude_yaw, ground_attitude_state)'));
+    disp(strcat(G_ATTITUDE_SUFFIX,'(g_attitude_roll, g_attitude_pitch, g_attitude_yaw, g_attitude_state)'));
 catch    
 end
 
-clear ground_attitude_file;
-clear ground_attitude_data;
-clear GROUND_ATTITUDE_SUFFIX;
+clear g_attitude_file;
+clear g_attitude_data;
+clear G_ATTITUDE_SUFFIX;
 
 try
-    ground_position_file = strcat(LOG_NAME,GROUND_POSITION_SUFFIX,LOG_TYPE);
-    ground_position_data = dlmread(ground_position_file);
+    g_position_file = strcat(LOG_NAME,G_POSITION_SUFFIX,LOG_TYPE);
+    g_position_data = dlmread(g_position_file);
     
-    ground_position_dist_north = ground_position_data(:,1);
-    ground_position_dist_east = ground_position_data(:,2);
-    ground_position_state = ground_position_data(:,3);
+    g_position_n = g_position_data(:,1);
+    g_position_e = g_position_data(:,2);
+    g_position_d = g_position_data(:,3);
+    g_position_state = g_position_data(:,4);
     
-    disp(strcat(GROUND_POSITION_SUFFIX,'(ground_position_dist_north, ground_position_dist_east, ground_position_state)'));
+    disp(strcat(G_POSITION_SUFFIX,'(g_position_n, g_position_e, g_position_e, g_position_state)'));
 catch
 end
 
-clear ground_position_file;
-clear ground_position_data;
-clear GROUND_POSITION_SUFFIX;
+clear g_position_file;
+clear g_position_data;
+clear G_POSITION_SUFFIX;
 
 try
-    waypoint_delta_file = strcat(LOG_NAME,WAYPOINT_DELTA_SUFFIX,LOG_TYPE);
-    waypoint_delta_data = dlmread(waypoint_delta_file);
+    waypoint_file = strcat(LOG_NAME,WAYPOINT_SUFFIX,LOG_TYPE);
+    waypoint_data = dlmread(waypoint_file);
     
-    waypoint_delta_dN = waypoint_delta_data(:,1);
-    waypoint_delta_dE = waypoint_delta_data(:,2); 
-    waypoint_delta_dZ = waypoint_delta_data(:,3);
-    waypoint_delta_thrust = waypoint_delta_data(:,4);
-    waypoint_delta_state = waypoint_delta_data(:,5);
+    waypoint_north = waypoint_data(:,1);
+    waypoint_east = waypoint_data(:,2); 
+    waypoint_z = waypoint_data(:,3);
+    waypoint_thrust = waypoint_data(:,4);
+    waypoint_state = waypoint_data(:,5);
     
-    disp(strcat(WAYPOINT_DELTA_SUFFIX,'(waypoint_delta_dN, waypoint_delta_dE, waypoint_delta_dZ,waypoint_delta_thrust, waypoint_delta_state)'));
+    disp(strcat(WAYPOINT_SUFFIX,'(waypoint_north, waypoint_east, waypoint_z,waypoint_thrust, waypoint_state)'));
 
 catch    
 end
-clear waypoint_delta_file;
-clear waypoint_delta_data;
-clear WAYPOINT_DELTA_SUFFIX;
+clear waypoint_file;
+clear waypoint_data;
+clear WAYPOINT_SUFFIX;
 
 clear LOG_NAME;
 clear LOG_TYPE;
+clear LOGS_FOLDER;
+clear ans;
 
 %% save data
 

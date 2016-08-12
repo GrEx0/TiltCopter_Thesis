@@ -7,9 +7,9 @@
  *
  * Code generation for model "Traslational_controller".
  *
- * Model version              : 1.122
+ * Model version              : 1.127
  * Simulink Coder version : 8.10 (R2016a) 10-Feb-2016
- * C++ source code generated on : Fri Aug 05 17:29:59 2016
+ * C++ source code generated on : Mon Aug 08 17:49:40 2016
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -196,23 +196,25 @@ typedef struct {
 
 /* Parameters (auto storage) */
 struct P_Traslational_controller_T_ {
+  real_T Kd_u;                         /* Variable: Kd_u
+                                        * Referenced by: '<S2>/Derivative Gain'
+                                        */
+  real_T Kd_v;                         /* Variable: Kd_v
+                                        * Referenced by: '<S3>/Derivative Gain'
+                                        */
   real_T Kp_u;                         /* Variable: Kp_u
                                         * Referenced by: '<S2>/Proportional Gain'
                                         */
   real_T Kp_v;                         /* Variable: Kp_v
                                         * Referenced by: '<S3>/Proportional Gain'
                                         */
-  real_T ucontroller_D;                /* Mask Parameter: ucontroller_D
-                                        * Referenced by: '<S2>/Derivative Gain'
+  real_T N_tras;                       /* Variable: N_tras
+                                        * Referenced by:
+                                        *   '<S2>/Filter Coefficient'
+                                        *   '<S3>/Filter Coefficient'
                                         */
-  real_T vcontroller_D;                /* Mask Parameter: vcontroller_D
-                                        * Referenced by: '<S3>/Derivative Gain'
-                                        */
-  real_T ucontroller_N;                /* Mask Parameter: ucontroller_N
-                                        * Referenced by: '<S2>/Filter Coefficient'
-                                        */
-  real_T vcontroller_N;                /* Mask Parameter: vcontroller_N
-                                        * Referenced by: '<S3>/Filter Coefficient'
+  real_T Gain2_Gain;                   /* Expression: -1
+                                        * Referenced by: '<S1>/Gain2'
                                         */
   real_T Saturation_UpperSat;          /* Expression: 1
                                         * Referenced by: '<S1>/Saturation'
@@ -225,6 +227,9 @@ struct P_Traslational_controller_T_ {
                                         */
   real_T Filter_IC;                    /* Expression: InitialConditionForFilter
                                         * Referenced by: '<S2>/Filter'
+                                        */
+  real_T Gain3_Gain;                   /* Expression: -1
+                                        * Referenced by: '<S1>/Gain3'
                                         */
   real_T Saturation1_UpperSat;         /* Expression: 1
                                         * Referenced by: '<S1>/Saturation1'

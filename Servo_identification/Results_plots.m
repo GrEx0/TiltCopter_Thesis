@@ -1,3 +1,12 @@
+% Tiltrotor Thesis
+% Author: Claudio Micheli
+% Latest review: 07.08.15
+
+% Script description: This script plots the figures used in the tesis
+%                     for the servomotor identification results.
+%                     It loads the data, does a little bit of processing
+%                     and then simply plots the results
+
 close all
 clear all
 

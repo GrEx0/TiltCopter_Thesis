@@ -7,9 +7,9 @@
  *
  * Code generation for model "Traslational_controller".
  *
- * Model version              : 1.122
+ * Model version              : 1.127
  * Simulink Coder version : 8.10 (R2016a) 10-Feb-2016
- * C++ source code generated on : Fri Aug 05 17:29:59 2016
+ * C++ source code generated on : Mon Aug 08 17:49:40 2016
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping

@@ -1,6 +1,6 @@
-clear all
-close all 
-clc
+% clear all
+% close all 
+% clc
 opengl software
 %% Import parameters
 Parameters
@@ -19,7 +19,7 @@ Fy = 0;
 %Set point u = [height[m] roll_a[rad] pitch_a[rad] yaw_r[rad/s]]
 U = [-1; 0; 0; 0];
 opengl hardwarebasic
-sim Simulator_weighted_inv
+sim test_reale
 
 P_e = yout(: ,1:3);
 V_b = yout(: ,4:6);
@@ -59,38 +59,39 @@ ylabel('[rad]')
 legend('phi', 'theta', 'psi')
 % 
 %% 3D Animation
-global index_view;
-global old_position;
-
-index_view = 0;
-old_position = [0 0 0];
+if 0
+    global index_view;
+    global old_position;
+    
+    index_view = 0;
+    old_position = [0 0 0];
     % Initialize the figure
     
     screen = get(0,'screensize');
     visual = figure('Name','3DPlot');
- %set(visual,'position',[2 65 screen(3)-40 screen(4)-300]);
+    %set(visual,'position',[2 65 screen(3)-40 screen(4)-300]);
     clf(visual);
     hold on;
     cameratoolbar('show');
     view(3);
     grid;
     axis vis3d;
-%     axis tight
-x_max = 1;
-y_max = 1;
+    %     axis tight
+    x_max = 1;
+    y_max = 1;
     axis([-1 x_max -1 y_max -0.3 inf])
     zoom(0.2);
-for i = 1:length(tout)
-    draw_mod( [P_e(i,:) Alpha_e(i,:) Motor_thr(i,:) Tilt_angles(i,:)]);
-    if (P_e(i,1)+0.8)>x_max
-        x_max = x_max +1;
-        axis([-1 x_max -1 y_max -0.3 inf])
+    for i = 1:length(tout)
+        draw_mod( [P_e(i,:) Alpha_e(i,:) Motor_thr(i,:) Tilt_angles(i,:)]);
+        if (P_e(i,1)+0.8)>x_max
+            x_max = x_max +1;
+            axis([-1 x_max -1 y_max -0.3 inf])
+        end
+        if (P_e(i,2)+0.8)>y_max
+            y_max = y_max +1;
+            axis([-1 x_max -1 y_max -0.3 inf])
+        end
+        
     end
-    if (P_e(i,2)+0.8)>y_max
-        y_max = y_max +1;
-        axis([-1 x_max -1 y_max -0.3 inf])
-    end
-    
 end
-
  %% End of code

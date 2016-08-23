@@ -57,25 +57,25 @@ for i=1:n_rotors
            R_BPi_axis = subs(R_BPi_axis,phi,alpha_1)    % Rotation matrix from group propeller Pi to body 
            F_1 = R_BPi_axis*T_p1
            Op1 = R_z_axis * [ b; 0 ; 0];
-           M_1 = cross(Op1,F_1) - R_BPi_axis *tau_d1;           % All'inizio era  M- R_BPi_axis
+           M_1 = cross(Op1,F_1) + R_BPi_axis *tau_d1;           % All'inizio era  M- R_BPi_axis
         case 2
             disp('Matrice di rotazione 2');
             R_BPi_axis = subs(R_BPi_axis,phi,alpha_2)
            F_2 = R_BPi_axis*T_p2;
            Op2 = R_z_axis * [ b; 0 ; 0];
-           M_2 = cross(Op2,F_2) - R_BPi_axis *tau_d2;
+           M_2 = cross(Op2,F_2) + R_BPi_axis *tau_d2;
             
         case 3
            disp('Matrice di rotazione 3');
            R_BPi_axis = subs(R_BPi_axis,phi,alpha_3)
            F_3 = R_BPi_axis*T_p3
            Op3 = R_z_axis * [ b; 0 ; 0];
-           M_3 = cross(Op3,F_3) - R_BPi_axis *tau_d3;
+           M_3 = cross(Op3,F_3) + R_BPi_axis *tau_d3;
         case 4
            R_BPi_axis = subs(R_BPi_axis,phi,alpha_4);
            F_4 = R_BPi_axis*T_p4;
            Op4 = R_z_axis * [ b; 0 ; 0];
-           M_4 = cross(Op4,F_4) - R_BPi_axis *tau_d4;
+           M_4 = cross(Op4,F_4) + R_BPi_axis *tau_d4;
     end
 end
 

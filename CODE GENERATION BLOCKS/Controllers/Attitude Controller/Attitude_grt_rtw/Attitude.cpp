@@ -7,9 +7,9 @@
  *
  * Code generation for model "Attitude".
  *
- * Model version              : 1.92
+ * Model version              : 1.93
  * Simulink Coder version : 8.10 (R2016a) 10-Feb-2016
- * C++ source code generated on : Tue Aug 09 16:06:40 2016
+ * C++ source code generated on : Mon Aug 22 18:04:14 2016
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -143,13 +143,11 @@ void AttitudeModelClass::step()
   }
 
   /* Sum: '<S1>/Sum1' incorporates:
-   *  Gain: '<S1>/Gain1'
    *  Gain: '<S1>/Yaw-rate2'
    *  Inport: '<Root>/IMU_Attitude'
    *  Saturate: '<S1>/Saturation1'
    */
-  rtb_Sum4 = Attitude_P.pitchMax * rtb_Sum4 - Attitude_P.Gain1_Gain *
-    Attitude_U.IMU_Attitude[1];
+  rtb_Sum4 = Attitude_P.pitchMax * rtb_Sum4 - Attitude_U.IMU_Attitude[1];
 
   /* Gain: '<S2>/Proportional Gain' */
   rtb_ProportionalGain_h = Attitude_P.KPP * rtb_Sum4;
@@ -281,10 +279,9 @@ void AttitudeModelClass::step()
   /* End of Saturate: '<S5>/Saturate' */
 
   /* Sum: '<S1>/Sum5' incorporates:
-   *  Gain: '<S1>/Gain'
    *  Inport: '<Root>/IMU_Rates'
    */
-  Sphi = rtb_Rates_B[1] - Attitude_P.Gain_Gain * Attitude_U.IMU_Rates[1];
+  Sphi = rtb_Rates_B[1] - Attitude_U.IMU_Rates[1];
 
   /* Gain: '<S6>/Filter Coefficient' incorporates:
    *  Gain: '<S6>/Derivative Gain'
@@ -540,16 +537,16 @@ void AttitudeModelClass::terminate()
 AttitudeModelClass::AttitudeModelClass()
 {
   static const P_Attitude_T Attitude_P_temp = {
-    0.00512,                           /* Variable: KPD
+    0.005,                             /* Variable: KPD
                                         * Referenced by: '<S2>/Derivative Gain'
                                         */
-    1.61,                              /* Variable: KPP
+    1.9,                               /* Variable: KPP
                                         * Referenced by: '<S2>/Proportional Gain'
                                         */
-    0.00512,                           /* Variable: KRD
+    0.005,                             /* Variable: KRD
                                         * Referenced by: '<S3>/Derivative Gain'
                                         */
-    1.61,                              /* Variable: KRP
+    1.9,                               /* Variable: KRP
                                         * Referenced by: '<S3>/Proportional Gain'
                                         */
     0.216,                             /* Variable: KYD
@@ -558,37 +555,37 @@ AttitudeModelClass::AttitudeModelClass()
     1.41,                              /* Variable: KYP
                                         * Referenced by: '<S4>/Proportional Gain'
                                         */
-    0.40514779629427244,               /* Variable: Kbp
+    0.28504385627478451,               /* Variable: Kbp
                                         * Referenced by: '<S5>/Kb'
                                         */
-    0.40514779629427244,               /* Variable: Kbq
+    0.28504385627478451,               /* Variable: Kbq
                                         * Referenced by: '<S6>/Kb'
                                         */
     0.34985711369071804,               /* Variable: Kbr
                                         * Referenced by: '<S7>/Kb'
                                         */
-    0.0499,                            /* Variable: Kdp
+    0.065,                             /* Variable: Kdp
                                         * Referenced by: '<S5>/Derivative Gain'
                                         */
-    0.0499,                            /* Variable: Kdq
+    0.065,                             /* Variable: Kdq
                                         * Referenced by: '<S6>/Derivative Gain'
                                         */
     0.0153,                            /* Variable: Kdr
                                         * Referenced by: '<S7>/Derivative Gain'
                                         */
-    0.304,                             /* Variable: Kip
+    0.8,                               /* Variable: Kip
                                         * Referenced by: '<S5>/Integral Gain'
                                         */
-    0.304,                             /* Variable: Kiq
+    0.8,                               /* Variable: Kiq
                                         * Referenced by: '<S6>/Integral Gain'
                                         */
     0.125,                             /* Variable: Kir
                                         * Referenced by: '<S7>/Integral Gain'
                                         */
-    0.298,                             /* Variable: Kpp
+    0.65,                              /* Variable: Kpp
                                         * Referenced by: '<S5>/Proportional Gain'
                                         */
-    0.298,                             /* Variable: Kpq
+    0.65,                              /* Variable: Kpq
                                         * Referenced by: '<S6>/Proportional Gain'
                                         */
     0.135,                             /* Variable: Kpr
@@ -642,9 +639,6 @@ AttitudeModelClass::AttitudeModelClass()
     -1.0,                              /* Expression: -1
                                         * Referenced by: '<S1>/Saturation1'
                                         */
-    -1.0,                              /* Expression: -1
-                                        * Referenced by: '<S1>/Gain1'
-                                        */
     0.0,                               /* Expression: InitialConditionForFilter
                                         * Referenced by: '<S2>/Filter'
                                         */
@@ -659,9 +653,6 @@ AttitudeModelClass::AttitudeModelClass()
                                         */
     0.0,                               /* Expression: InitialConditionForFilter
                                         * Referenced by: '<S5>/Filter'
-                                        */
-    -1.0,                              /* Expression: -1
-                                        * Referenced by: '<S1>/Gain'
                                         */
     0.0,                               /* Expression: InitialConditionForIntegrator
                                         * Referenced by: '<S6>/Integrator'

@@ -6,6 +6,15 @@ EXPERIMENTAL_DATA = 'RBS_2a_deltaTH1_290716';
 start_sample = 1300;
 tau_f = 1/30;                         % FIlter constant use 30 or 100
 
+% Identified greyest system WITH TIME DELAY FROM SRIVC
+
+A1_delay_grey  = ureal('A1',-6.468310137,'PlusMinus',0.19216675);
+B1_delay_grey  = ureal('B1',8.256575881,'PlusMinus',0.146149695);
+C_delay_grey = 1;
+D_delay_grey = 0;
+G_delGrey= ss(A1_delay_grey,B1_delay_grey,C_delay_grey,D_delay_grey);
+
+
 % Identified  avg greyest system - Test A
 A1_a = ureal('A1',-3.878866607,'PlusMinus',0.15015509);
 B1_a = ureal('B1',5.662050517,'PlusMinus',0.130973455);
@@ -82,7 +91,8 @@ B1_sA = ureal('B1_sA',6.844908507,'PlusMinus',0.006598076);
 
 num_i = A1_sA;
 den_i = [1 B1_sA];
-G_srivcA = tf(num_i,den_i)*exp(-0.09006*s);
+time_delay = exp(-0.09006*s);
+G_srivcA = tf(num_i,den_i);
 %G_srivc = tf(num_i,den_i);
 
 % Identified  avg srivc system - Test B
@@ -113,6 +123,21 @@ if 0
     title('SRIVC identification results');
     hold off
 end
+
+% BODE DIAGRAMS COMPARISON
+    figure;
+    bode(G_delGrey);
+    hold on
+    bode(G_srivcA);
+    hold off
+    title('Greyest VS SRIVC identified system - WITH TIMEDELAY');
+    
+    figure;
+    bode(G_greyA);
+    hold on
+    bode(G_srivcA);
+    hold off
+    title('Greyest VS SRIVC identified system - NO TIMEDELAY');
 
 % Identified  BEST srivc system
 A1_sBest = ureal('A1_sBest',6.984955,'PlusMinus',0.0145);

@@ -12,7 +12,7 @@ clear all
 
 %% SETUP VALUES
 LOGS_FOLDER = 'parsed_logs';
-PARSED_LOG = 'actuators_ident_3';
+PARSED_LOG = '12-07-16_act_id_4';
 PARSED_LOG_CROSS = 'actuators_ident_3';     % Log for crossvalidation
 load(strcat(LOGS_FOLDER,'/',PARSED_LOG,'/',PARSED_LOG));
 Ts = 0.010;
@@ -41,6 +41,11 @@ plot(ctr_signal)
 hold on
 plot(ground_attitude_roll)
 hold off
+
+% Plot in scala dei tempi
+if 1
+    plot(t,ctr_signal,t,ground_attitude_roll);
+end
 
 %% Identified system definition
       

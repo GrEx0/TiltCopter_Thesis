@@ -19,7 +19,7 @@ Fy = 0;
 %Set point u = [height[m] roll_a[rad] pitch_a[rad] yaw_r[rad/s]]
 U = [-1; 0; 0; 0];
 opengl hardwarebasic
-sim test_reale
+sim Simulator_weighted_inv
 
 P_e = yout(: ,1:3);
 V_b = yout(: ,4:6);
@@ -59,7 +59,7 @@ ylabel('[rad]')
 legend('phi', 'theta', 'psi')
 % 
 %% 3D Animation
-if 0
+if 1
     global index_view;
     global old_position;
     

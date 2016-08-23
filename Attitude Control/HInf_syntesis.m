@@ -2,7 +2,7 @@
 % Author: Mattia Giurato           %
 % Last review: 2015/11/09          %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-clear all
+%clear all
 close all 
 clc
 
@@ -98,15 +98,15 @@ X4 = AnalysisPoint('Theta');
 
 %Tunable regulators
 Cq0 = ltiblock.pid('Cq0','pid');  % tunable PID
-Cq0.Kp.Value = 0.3;       % initialize Kp
-Cq0.Ki.Value = 0.3;       % initialize Ki
+Cq0.Kp.Value = 1;       % initialize Kp
+Cq0.Ki.Value = 0.8;       % initialize Ki
 Cq0.Kd.Value = 0.05;      % initialize Kd
 Cq0.Tf.Value = 0.01;      % set parameter Tf
 Cq0.Tf.Free = false;      % fix parameter Tf to this value
 pid(Cq0);
 Cq0.u = 'e_q'; Cq0.y = 'deltaM';
 Ctheta0 = ltiblock.pid('Ctheta0','pd');
-Ctheta0.Kp.Value = 1.2;   % initialize Kp
+Ctheta0.Kp.Value = 10;   % initialize Kp
 Ctheta0.Kd.Value = 0.005; % initialize Kd
 Ctheta0.Tf.Value = 0.01;  % set parameter Tf
 Ctheta0.Tf.Free = false;  % fix parameter Tf to this value
@@ -153,7 +153,7 @@ motor = 1/(1+tau*s);
 Gq = sysmul;
 Gtheta = 1/s;
 Gtheta.u = 'q'; Gtheta.y = 'Theta';
-mixer = ss(1/(Kt*b*4*sqrt(2)*OMEhov));
+mixer = ss(1/(Kt*b*4*OMEhov));
 mixer.u = 'deltaM'; mixer.y = 'deltaOmega';
 del = exp(-delay_attitude*tc*s);
 delay = pade(del,1);

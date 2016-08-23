@@ -7,9 +7,9 @@
  *
  * Code generation for model "Attitude".
  *
- * Model version              : 1.92
+ * Model version              : 1.93
  * Simulink Coder version : 8.10 (R2016a) 10-Feb-2016
- * C++ source code generated on : Tue Aug 09 16:06:40 2016
+ * C++ source code generated on : Mon Aug 22 18:04:14 2016
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -327,9 +327,6 @@ struct P_Attitude_T_ {
   real_T Saturation1_LowerSat;         /* Expression: -1
                                         * Referenced by: '<S1>/Saturation1'
                                         */
-  real_T Gain1_Gain;                   /* Expression: -1
-                                        * Referenced by: '<S1>/Gain1'
-                                        */
   real_T Filter_IC_f;                  /* Expression: InitialConditionForFilter
                                         * Referenced by: '<S2>/Filter'
                                         */
@@ -344,9 +341,6 @@ struct P_Attitude_T_ {
                                         */
   real_T Filter_IC_c;                  /* Expression: InitialConditionForFilter
                                         * Referenced by: '<S5>/Filter'
-                                        */
-  real_T Gain_Gain;                    /* Expression: -1
-                                        * Referenced by: '<S1>/Gain'
                                         */
   real_T Integrator_IC_l;              /* Expression: InitialConditionForIntegrator
                                         * Referenced by: '<S6>/Integrator'

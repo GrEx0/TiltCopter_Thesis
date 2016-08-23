@@ -1,14 +1,14 @@
 % Author: Claudio Micheli
 % This script elaborates the acquired data and performs the parameter
 % estimation of the unknowns 
-close all;
+%close all;
 clear all;
 clc
 
 %% System parameters 
 
-EXPERIMENTAL_DATA = 'RBS_h_deltaTH1_290716';     % Data you want to do the estimation with
-start_sample = 1600;                   % Sample from you wish to start identifying
+EXPERIMENTAL_DATA = 'RBS_a_deltaTH1_290716';     % Data you want to do the estimation with
+start_sample = 2200;                   % Sample from you wish to start identifying
 Ts = 0.01                              %Sampling time
 tau_f = 1/30;                         % FIlter constant use 30 or 100
 
@@ -60,7 +60,7 @@ den_p  = [1 -1/Jxx*stab_der_L]
 G_p = tf(gain_p,den_p);
 roll_ss_phi = roll_ss(2);       % Transfer function from Input dOmega -> roll angle phi
 
-if 1
+if 0
 bode(roll_ss_p);grid;           % Bode plot of the TF -> bandwith about
 figure;bode(G_p);grid;
 end
@@ -81,7 +81,7 @@ control_motor_2 = mixer_ctr_motor_2*m_th + q_th;
 delta_omega_ctr = control_motor_4 - control_motor_2 ;
 
 %% Noise reduction 
-u = delta_omega_ctr; 
+u = delta_omega_ctr*1/x1(1); 
 y = imu_raw_gyro_x(1:length(u));
 
 if 1 
@@ -111,11 +111,13 @@ if 0               % Enable filter vs non filtered input
   title('Filtered input vs NON filtered');
 end
  
+y_srivc = y_f(start_sample:end);
+u_srivc = u_f(start_sample:end);
 % Delay correction
-     %y = y_f(5:end);
-    % u=u_f(1:end-4);
-y = y_f;
-%u = u_f;
+  y = y_f(9:end);
+  u=u_f(1:end-8);
+%  y = y_f;
+%  u = u_f;
     u=u(start_sample:end);
     y=y(start_sample:end);    
   
@@ -126,6 +128,16 @@ y = y_f;
     scal_y = norm(y); 
     u = 1/scal_u * u;
     y = 1/scal_y * y;
+    
+% normalizza e rimuove media srivc
+    u_srivc = u_srivc - mean(u_srivc);  
+    y_srivc = y_srivc - mean(y_srivc);
+    scal_u_srivc = norm(u_srivc);
+    scal_y_srivc = norm(y_srivc); 
+    u_srivc = 1/scal_u_srivc * u_srivc;
+    y_srivc = 1/scal_y_srivc * y_srivc;
+    
+    
    
     figure;plot(u);title('Normalized input u')  
     figure;plot(y);title('Normalized output y')  
@@ -167,37 +179,51 @@ data_single.OutputUnit = {'rad/s'};
 data_single.Tstart = 0;
 data_single.TimeUnit = 's';
 
+% SRIVC
+data_single_srivc = iddata(y_srivc,u_srivc,Ts);
+data_single_srivc.InputName = 'deltaOmega';
+data_single_srivc.InputUnit = 'rad/s';
+data_single_srivc.OutputName = {'Roll rate'};
+data_single_srivc.OutputUnit = {'rad/s'};
+data_single_srivc.Tstart = 0;
+data_single_srivc.TimeUnit = 's';
+
 % Again, you want to estimate the stability derivative and the inertia Jxx
-% parameters = {'A1',A1;'B1',B1};
-parameters = {'stab_der_L',stab_der_L;'Jxx',Jxx;'dLdu_g',dLdu_g};
+parameters = {'A1',A1;'B1',B1};
+%parameters = {'stab_der_L',stab_der_L;'Jxx',Jxx;'dLdu_g',dLdu_g};
 
 init_sys_single = idgrey('Roll_dynamics_single',parameters,fcn_type);
-init_sys_single.Structure.Parameters(3).Free = false;
+% init_sys_single.Structure.Parameters(3).Free = false;
 
 sys_single = greyest(data_single,init_sys_single,opt);
-figure;
-compare(data_single,sys_single,Inf,opt_compare);
+% figure;
+% compare(data_single,sys_single,Inf,opt_compare);
 
 % VAF computation
 t  = .01 * [0:numel(u)-1];
 yi = lsim(sys_single,u,t);
 vaf_grey = vaf(y,yi);
+
 figure;
 plot(t,y,t,yi);
-title('Real output VS Model output');
+title('Real output VS Model output GREY');
 
 % SRIVC Identification
+t  = .01 * [0:numel(u_srivc)-1];
  nn = [1 1 0];
- Msrivc = tdsrivc(data_single,nn);
+ Msrivc = tdsrivc(data_single_srivc,nn);
  present(Msrivc);
   %compare the model output with the measured output
-  figure;
-  comparec(data_single,Msrivc);
-  yi_srivc = lsim(Msrivc,u,t);
-  vaf_srivc= vaf(y,yi_srivc);
-  if 0
+  if 0 
+    figure;
+    comparec(data_single_srivc,Msrivc);
+  end
+  yi_srivc = lsim(Msrivc,u_srivc,t);
+  vaf_srivc= vaf(y_srivc,yi_srivc);
+ 
+  if 1
       figure;
-      plot(t,y,t,yi);
+      plot(t,y_srivc,t,yi_srivc);
       title('Real output VS Model output SRIVC');
   end
  % Present results
@@ -214,4 +240,8 @@ fprintf('A1 srivc:%3f , B2 srivc: %3f \n',res_grey(1),res_grey(2));
 res_cov_grey =getcov(Msrivc); 
 fprintf('A1S var:%3f , B2s var: %3f \n',res_cov_grey(1,1),res_cov_grey(2,2));
   
-  
+ figure;
+ t  = .01 * [0:numel(u)-1];
+ plot(t,y,t,yi,t,yi_srivc(1:numel(yi)))
+ title('GREY MODEL VS SRIVC MODEL');
+ 

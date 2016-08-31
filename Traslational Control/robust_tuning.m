@@ -42,15 +42,16 @@ CL_sys = feedback(L_inner,X3);
 %% Sensitivity functions
 
 loops = loopsens(X3*G_t*servo*X4*mixer*X1, R_Fx);
-figure
+figure('name','Sensitivity functions - MANUAL TUNING');
 bodemag(L_inner,'r',loops.Si,'b',loops.Ti,'g')
 legend('L','S','T')
 xlim([1e-2 1e2]);
 grid minor
 
+
 %% Partendo dalle fdt ottenute, ricaviamo le specifiche per Hinf
 
-% H Inf syntesys on the PITCH
+% H Inf syntesys 
 
 % Innter regulator
 % The starting parameters have been obtained by manual tuning the real
@@ -76,7 +77,7 @@ CL0.OutputName = 'u';
 % (gain from reference input to tracking error) as a function of frequency
 % -------------------------------------------------------------------------
 
-wc = 2;                               %[rad/s] bandwidth of the system
+wc = 1.2;                               %[rad/s] bandwidth of the system
 responsetime = 2/wc;                   %[s] In this way we are able to track all the signals in the bandwidth of the system
 dcerror = 0.0001;                      %[%] steady state error ( relative gain of input vs output) (default value)
 peakerror = 1.2;                    
@@ -115,7 +116,7 @@ title('Closed-loop response')
 
 L_inner_opt = X3*G_t*servo*X4*mixer*X1*Cu;
 figure;
-bode(L_inner_opt);margin;
+bode(L_inner_opt);margin(L_inner_opt);
 % %% Error parametrization
 % %Define the nominal behaviour of the system
 % sysnom = G_.NominalValue;

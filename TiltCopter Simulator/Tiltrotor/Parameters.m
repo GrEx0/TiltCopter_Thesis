@@ -239,13 +239,40 @@ else
 % RESULT: SHIT
 
 % HINF 3008 #6
+% Kpp = 0.3;
+% Kip = 0.697;
+% Kdp = 0.00534;
+% Kpq = Kpp;
+% Kiq = Kip;
+% Kdq = Kdp;
+% RESULT: VALORI UTILIZZATI IN VOLO
+
+% HINF 3108 #1
+% Kpp = 0.252;
+% Kip = 0.697;
+% Kdp = 0.00834;
+% Kpq = Kpp;
+% Kiq = Kip;
+% Kdq = Kdp;
+% RESULT: MERDA
+
+% HINF 3108 #2
+% Kpp = 0.225;
+% Kip = 1.36;
+% Kdp = 0.01;
+% Kpq = Kpp;
+% Kiq = Kip;
+% Kdq = Kdp;
+% RESULT: MERDA
+
+% HINF 3108 #3
 Kpp = 0.3;
-Kip = 0.697;
-Kdp = 0.00534;
+Kip = 0.72;
+Kdp = 0.006;
 Kpq = Kpp;
 Kiq = Kip;
 Kdq = Kdp;
-% RESULT: VALORI UTILIZZATI IN VOLO
+% RESULT:SUPER
 
 
 end
@@ -349,7 +376,7 @@ sata = 5;
 % Kd_u = 0.01;
 %--------------------------------------------------
 
-% PARAMETRI HINF ORIGINALI
+% PARAMETRI HINF ORIGINALI - NON USARE! VANNO MEGLIO QUELLI AGGIUSTATI
 %È  un PID
 % Kp_v = 6.44;
 % Ki_v = 5.6;

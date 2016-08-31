@@ -9,7 +9,7 @@
  *
  * Model version              : 1.95
  * Simulink Coder version : 8.10 (R2016a) 10-Feb-2016
- * C++ source code generated on : Tue Aug 30 17:30:46 2016
+ * C++ source code generated on : Wed Aug 31 11:50:25 2016
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -555,28 +555,28 @@ AttitudeModelClass::AttitudeModelClass()
     1.41,                              /* Variable: KYP
                                         * Referenced by: '<S4>/Proportional Gain'
                                         */
-    0.087529458045991382,              /* Variable: Kbp
+    0.091287092917527679,              /* Variable: Kbp
                                         * Referenced by: '<S5>/Kb'
                                         */
-    0.087529458045991382,              /* Variable: Kbq
+    0.091287092917527679,              /* Variable: Kbq
                                         * Referenced by: '<S6>/Kb'
                                         */
     0.34985711369071804,               /* Variable: Kbr
                                         * Referenced by: '<S7>/Kb'
                                         */
-    0.00534,                           /* Variable: Kdp
+    0.006,                             /* Variable: Kdp
                                         * Referenced by: '<S5>/Derivative Gain'
                                         */
-    0.00534,                           /* Variable: Kdq
+    0.006,                             /* Variable: Kdq
                                         * Referenced by: '<S6>/Derivative Gain'
                                         */
     0.0153,                            /* Variable: Kdr
                                         * Referenced by: '<S7>/Derivative Gain'
                                         */
-    0.697,                             /* Variable: Kip
+    0.72,                              /* Variable: Kip
                                         * Referenced by: '<S5>/Integral Gain'
                                         */
-    0.697,                             /* Variable: Kiq
+    0.72,                              /* Variable: Kiq
                                         * Referenced by: '<S6>/Integral Gain'
                                         */
     0.125,                             /* Variable: Kir

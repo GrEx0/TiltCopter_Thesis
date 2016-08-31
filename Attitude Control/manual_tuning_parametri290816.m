@@ -112,8 +112,8 @@ dcerror = 0.0001;                      %[%] steady state error ( relative gain o
 peakerror = 1.25;                    
 Req_inner = TuningGoal.Tracking('p_0','p',responsetime,dcerror,peakerror);
 
-attfact = frd([10 1 1],[0.1*23 23 10*23]);
-R3 = TuningGoal.Rejection('deltaL',attfact);
+attfact = frd([100 1 1],[0.1*wc_inner wc_inner 10*wc_inner]);
+R3 = TuningGoal.Rejection('p',attfact);
 
 %Tune the control system
 SoftReqs = [];

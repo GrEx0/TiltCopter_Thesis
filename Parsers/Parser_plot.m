@@ -3,9 +3,9 @@
 % Last review: 2015/06/06                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-clc
-clear all
-close all
+% clc
+% clear all
+% close all
 
 %% Files Parameters
 
@@ -13,7 +13,7 @@ close all
 LOG_PARSER = 'logParser.jar';
 LOGS_FOLDER = 'parsed_logs';
 
-LOG_NAME = 'calib';
+LOG_NAME = 'tilt_3008_8avi';
 LOG_TYPE = '.txt';
 LOG_FOLDER = strcat(LOGS_FOLDER,'/',LOG_NAME);
 LOG_FILE = strcat(LOG_NAME,LOG_TYPE);

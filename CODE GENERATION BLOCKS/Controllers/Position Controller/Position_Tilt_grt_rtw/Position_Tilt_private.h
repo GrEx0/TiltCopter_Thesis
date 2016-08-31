@@ -7,9 +7,9 @@
  *
  * Code generation for model "Position_Tilt".
  *
- * Model version              : 1.116
+ * Model version              : 1.120
  * Simulink Coder version : 8.10 (R2016a) 10-Feb-2016
- * C++ source code generated on : Thu Jul 28 11:58:29 2016
+ * C++ source code generated on : Tue Aug 30 18:08:24 2016
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -22,4 +22,25 @@
 #define RTW_HEADER_Position_Tilt_private_h_
 #include "rtwtypes.h"
 #include "multiword_types.h"
+
+/* Private macros used by the generated code to access rtModel */
+#ifndef rtmIsMajorTimeStep
+# define rtmIsMajorTimeStep(rtm)       (((rtm)->Timing.simTimeStep) == MAJOR_TIME_STEP)
+#endif
+
+#ifndef rtmIsMinorTimeStep
+# define rtmIsMinorTimeStep(rtm)       (((rtm)->Timing.simTimeStep) == MINOR_TIME_STEP)
+#endif
+
+#ifndef rtmGetTPtr
+# define rtmGetTPtr(rtm)               ((rtm)->Timing.t)
+#endif
+
+#ifndef rtmSetTPtr
+# define rtmSetTPtr(rtm, val)          ((rtm)->Timing.t = (val))
+#endif
+
+/* private model entry point functions */
+extern void Position_Tilt_derivatives();
+
 #endif                                 /* RTW_HEADER_Position_Tilt_private_h_ */

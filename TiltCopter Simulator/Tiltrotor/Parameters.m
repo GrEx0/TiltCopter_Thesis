@@ -164,18 +164,92 @@ if 0
  Kip = 0.304;
  Kdp = 0.0499;
 else
-% VALORI TILTROTOR
- Kpp = 0.65;
+% VALORI PERFETTI ----------------------------------------
+%roll ridotto 30% rispetto a pitch
+% Kpp = 0.4;
+% Kip = 0.44;
+% Kdp = 0.06;
+% % RESULT: PERFECT!
+
+%pitch VALORI PERFETTI
+% Kpq = 0.58;
+% Kiq = 0.7;
+% Kdq = 0.075;
+
+% VALORI COMMIT 8e4458c
+% Kdp = 0.065;
 % Kip = 0.8;
- Kip = 0.8;
- Kdp = 0.065;
-% Kpp =0.013;
-% Kip = 0.0653;
-% Kdp = 0.0006;
+% Kpp = 0.65;
+% Kpq = Kpp;
+% Kiq = Kip;
+% Kdq = Kdp;
+%-------------------------------------------------
+
+% HINF Funzionante  -test 1  - SONO QUELLI DI SABATO NON VANNO PIU
+% Kpp = 0.041;
+% Kip = 0.234;
+% Kdp = 0.00194;
+% Kpq = Kpp;
+% Kiq = Kip;
+% Kdq = Kdp;
+
+% HINF 3008 #1
+% Kpp = 0.636;
+% Kip = 5.75;
+% Kdp = 0.0583;
+% Kpq = Kpp;
+% Kiq = Kip;
+% Kdq = Kdp;
+% RESULT : NO VOLA
+
+% % HINF 3008 #2
+%  Kpp = 0.578;
+%  Kip = 0.7;
+%  Kdp = 0.0158;
+%  Kpq = Kpp;
+%  Kiq = Kip;
+%  Kdq = Kdp;
+% % RESULT: VOLA!
+
+% HINF 3008 #3
+% Kpp = 0.188;
+% Kip = 3.25;
+% Kdp = 0.0111;
+% Kpq = Kpp;
+% Kiq = Kip;
+% Kdq = Kdp;
+%RESULT: SHIT
+
+% % HINF 3008 #4
+% % Kpp = 0.104;
+% % Kip = 0.586;
+% % Kdp = 0.00483;
+% % Kpq = Kpp;
+% % Kiq = Kip;
+% % Kdq = Kdp;
+% % RESULT: SHIT
+
+% HINF 3008 #5
+% Kpp = 0.394;
+% Kip = 2.84;
+% Kdp = 0.0254;
+% Kpq = Kpp;
+% Kiq = Kip;
+% Kdq = Kdp;
+% RESULT: SHIT
+
+% HINF 3008 #6
+Kpp = 0.3;
+Kip = 0.697;
+Kdp = 0.00534;
+Kpq = Kpp;
+Kiq = Kip;
+Kdq = Kdp;
+% RESULT: VALORI UTILIZZATI IN VOLO
+
 
 end
 %Anti-Windup (Back-calculation)
-% Kbp = 0;
 Kbp = sqrt(Kdp/Kip);
 satp = 1.5;
 
@@ -185,9 +259,7 @@ satp = 1.5;
 % Kiq = 0.3;
 % Kdq = 0.05;
 %H-Infinity
-Kpq = Kpp;
-Kiq = Kip;
-Kdq = Kdp;
+
 %Anti-Windup (Back-calculation)
 % Kbq = 0;
 Kbq = sqrt(Kdq/Kiq);
@@ -219,28 +291,34 @@ satr = 1;
 if 0
  KRP = 1.61;
  KRD = 0.00512;
-% VALUES TILTROTOR
 else
-    % KRP = 25
-% VALORI "BUONI"
-KRP = 1.9;
-KRD = 0.005;
-% KRP = 2.16;
-% KRD = 0.162;
-end
-%theta PD
-%Guess
-% KPP = 1.2;
-% KPD = 0.005;
+    % VALUES TILTROTOR
+% VALORI TILTROTOR  "BUONI"
+% KRP = 1.9;
+% KRD = 0.005;
 
-%H-Infinity
+% HINF funzionante - test 1 - VALORI DI SABATO
+%  KRP = 1.43;
+%  KRD = 0.01;
+
+% HINF 3008 #2 - VALORI BUONI DA USARE 
+% KRP = 1.9;
+% KRD = 0.005;
+
+% TEST HINF ANELLO ESTERNO #7
+% KRP = 2.41;
+% KRD = 0.0868;
+
+% TEST HINF ANELLO ESTERNO #8 - OK
+KRP = 1.61;
+KRD = 0.0584;
+
+end
+
 KPP = KRP;
 KPD = KRD;
 
 %psi PD
-%Guess
-% KYP = 0.93;
-% KYD = 0.01;
 %H-Infinity
 KYP = 1.41;
 KYD = 0.216;
@@ -258,19 +336,48 @@ Kba = sqrt(KaD/KaI);
 sata = 5;
 
 %% Traslational Controller
-% Kp_v = 19;
-% Kp_u = 19;
-% con 10 risultati discreti
-N_tras = 150;
-% Kp_v = 10;
-% Kp_u = 10;
-Kp_v = 6;
-Kp_u = 6;
-Kd_v = 0.1;
-Kd_u = 0.1;
-% Ki_v = 6;
-% Ki_u = 6;
-umax = 0.5;
-vmax = 0.5;
+
+% VALORI TILTING FUNZIONANTI
+
+ N_tras = 100;
+
+% PARAMETRI FUNZIONANTI OTTENUTI A MANO
+%N_tras = 150;
+% Kp_v = 4;
+% Kp_u = 4;
+% Kd_v = 0.01;
+% Kd_u = 0.01;
+%--------------------------------------------------
+
+% PARAMETRI HINF ORIGINALI
+%È  un PID
+% Kp_v = 6.44;
+% Ki_v = 5.6;
+% Kd_v = 0.365;
+
+%PARAMETRI AGGIUSTATI 300816
+Kp_v = 6.3;
+Ki_v = 5.6;
+Kd_v = 0.290;
+
+Kp_u = Kp_v;
+Ki_u = Ki_v;
+Kd_u = Kd_v;
+
+umax = 1;
+vmax = 1;
+
+%% Position controller - tiltrotor
+
+% Kp_N = 0.3;
+% Kd_N = 0.01;
+% Kp_E = Kp_N;
+% Kd_E = Kd_N;
+
+% Valori a mano 3008
+Kp_N = 0.15;
+Kd_N = 0.01;
+Kp_E = Kp_N;
+Kd_E = Kd_N;
 
  %% End of code

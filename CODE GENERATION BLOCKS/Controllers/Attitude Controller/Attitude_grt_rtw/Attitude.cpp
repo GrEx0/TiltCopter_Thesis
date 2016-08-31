@@ -7,9 +7,9 @@
  *
  * Code generation for model "Attitude".
  *
- * Model version              : 1.93
+ * Model version              : 1.95
  * Simulink Coder version : 8.10 (R2016a) 10-Feb-2016
- * C++ source code generated on : Mon Aug 22 18:04:14 2016
+ * C++ source code generated on : Tue Aug 30 17:30:46 2016
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -537,16 +537,16 @@ void AttitudeModelClass::terminate()
 AttitudeModelClass::AttitudeModelClass()
 {
   static const P_Attitude_T Attitude_P_temp = {
-    0.005,                             /* Variable: KPD
+    0.0584,                            /* Variable: KPD
                                         * Referenced by: '<S2>/Derivative Gain'
                                         */
-    1.9,                               /* Variable: KPP
+    1.61,                              /* Variable: KPP
                                         * Referenced by: '<S2>/Proportional Gain'
                                         */
-    0.005,                             /* Variable: KRD
+    0.0584,                            /* Variable: KRD
                                         * Referenced by: '<S3>/Derivative Gain'
                                         */
-    1.9,                               /* Variable: KRP
+    1.61,                              /* Variable: KRP
                                         * Referenced by: '<S3>/Proportional Gain'
                                         */
     0.216,                             /* Variable: KYD
@@ -555,37 +555,37 @@ AttitudeModelClass::AttitudeModelClass()
     1.41,                              /* Variable: KYP
                                         * Referenced by: '<S4>/Proportional Gain'
                                         */
-    0.28504385627478451,               /* Variable: Kbp
+    0.087529458045991382,              /* Variable: Kbp
                                         * Referenced by: '<S5>/Kb'
                                         */
-    0.28504385627478451,               /* Variable: Kbq
+    0.087529458045991382,              /* Variable: Kbq
                                         * Referenced by: '<S6>/Kb'
                                         */
     0.34985711369071804,               /* Variable: Kbr
                                         * Referenced by: '<S7>/Kb'
                                         */
-    0.065,                             /* Variable: Kdp
+    0.00534,                           /* Variable: Kdp
                                         * Referenced by: '<S5>/Derivative Gain'
                                         */
-    0.065,                             /* Variable: Kdq
+    0.00534,                           /* Variable: Kdq
                                         * Referenced by: '<S6>/Derivative Gain'
                                         */
     0.0153,                            /* Variable: Kdr
                                         * Referenced by: '<S7>/Derivative Gain'
                                         */
-    0.8,                               /* Variable: Kip
+    0.697,                             /* Variable: Kip
                                         * Referenced by: '<S5>/Integral Gain'
                                         */
-    0.8,                               /* Variable: Kiq
+    0.697,                             /* Variable: Kiq
                                         * Referenced by: '<S6>/Integral Gain'
                                         */
     0.125,                             /* Variable: Kir
                                         * Referenced by: '<S7>/Integral Gain'
                                         */
-    0.65,                              /* Variable: Kpp
+    0.3,                               /* Variable: Kpp
                                         * Referenced by: '<S5>/Proportional Gain'
                                         */
-    0.65,                              /* Variable: Kpq
+    0.3,                               /* Variable: Kpq
                                         * Referenced by: '<S6>/Proportional Gain'
                                         */
     0.135,                             /* Variable: Kpr

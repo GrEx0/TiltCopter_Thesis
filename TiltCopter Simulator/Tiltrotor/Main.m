@@ -59,7 +59,7 @@ ylabel('[rad]')
 legend('phi', 'theta', 'psi')
 % 
 %% 3D Animation
-if 1
+if 0
     global index_view;
     global old_position;
     

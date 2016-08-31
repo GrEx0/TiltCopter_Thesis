@@ -1,11 +1,15 @@
 /*
  * Mixer_private.h
  *
+ * Academic License - for use in teaching, academic research, and meeting
+ * course requirements at degree granting institutions only.  Not for
+ * government, commercial, or other organizational use.
+ *
  * Code generation for model "Mixer".
  *
  * Model version              : 1.20
- * Simulink Coder version : 8.8 (R2015a) 09-Feb-2015
- * C++ source code generated on : Wed Jun 29 11:32:59 2016
+ * Simulink Coder version : 8.10 (R2016a) 10-Feb-2016
+ * C++ source code generated on : Tue Aug 23 10:33:57 2016
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping

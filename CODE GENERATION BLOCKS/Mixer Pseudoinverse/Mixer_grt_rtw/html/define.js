@@ -1,12 +1,12 @@
 function CodeDefine() { 
 this.def = new Array();
 this.def["step"] = {file: "Mixer_cpp.html",line:25,type:"fcn"};
-this.def["initialize"] = {file: "Mixer_cpp.html",line:267,type:"fcn"};
-this.def["terminate"] = {file: "Mixer_cpp.html",line:284,type:"fcn"};
-this.def["getRTM"] = {file: "Mixer_cpp.html",line:389,type:"fcn"};
+this.def["initialize"] = {file: "Mixer_cpp.html",line:266,type:"fcn"};
+this.def["terminate"] = {file: "Mixer_cpp.html",line:283,type:"fcn"};
+this.def["getRTM"] = {file: "Mixer_cpp.html",line:385,type:"fcn"};
 this.def["ExtU_Mixer_T"] = {file: "Mixer_h.html",line:55,type:"type"};
 this.def["ExtY_Mixer_T"] = {file: "Mixer_h.html",line:67,type:"type"};
-this.def["Mixer_U"] = {file: "Mixer_h.html",line:159,type:"var"};
+this.def["Mixer_U"] = {file: "Mixer_h.html",line:156,type:"var"};
 this.def["P_Mixer_T"] = {file: "Mixer_types_h.html",line:27,type:"type"};
 this.def["RT_MODEL_Mixer_T"] = {file: "Mixer_types_h.html",line:30,type:"type"};
 this.def["long_T"] = {file: "multiword_types_h.html",line:28,type:"type"};

@@ -162,6 +162,7 @@ Cq = getBlockValue(CL,'Cq0')
 Cq.u = 'e_q'; Cq.y = 'deltaM';
 Ctheta = getBlockValue(CL,'Ctheta0')
 Ctheta.u = 'e_{Theta}'; Ctheta.y = 'q_0';
+
 %Loop and transfer function
 InnerLoop = feedback(motor*Gq*del*mixer*Cq,1);
 L = Gtheta*InnerLoop*Ctheta;

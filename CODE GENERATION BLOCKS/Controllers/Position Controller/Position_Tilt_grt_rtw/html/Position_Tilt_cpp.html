@@ -29,11 +29,11 @@
 <tr name="9" id="9">
 <td>9</td><td><span class="ct"> *</span></td></tr>
 <tr name="10" id="10">
-<td>10</td><td><span class="ct"> * Model version              : 1.116</span></td></tr>
+<td>10</td><td><span class="ct"> * Model version              : 1.120</span></td></tr>
 <tr name="11" id="11">
 <td>11</td><td><span class="ct"> * Simulink Coder version : 8.10 (R2016a) 10-Feb-2016</span></td></tr>
 <tr name="12" id="12">
-<td>12</td><td><span class="ct"> * C++ source code generated on : Thu Jul 28 11:58:29 2016</span></td></tr>
+<td>12</td><td><span class="ct"> * C++ source code generated on : Tue Aug 30 18:08:24 2016</span></td></tr>
 <tr name="13" id="13">
 <td>13</td><td><span class="ct"> *</span></td></tr>
 <tr name="14" id="14">
@@ -57,241 +57,575 @@
 <tr name="23" id="23">
 <td>23</td><td></td></tr>
 <tr name="24" id="24">
-<td>24</td><td><span class="ct">/* Model step function */</span></td></tr>
+<td>24</td><td><span class="ct">/*</span></td></tr>
 <tr name="25" id="25">
-<td>25</td><td><span class="kw">void</span> <a id="25c6" class="tk">Position_TiltModelClass</a>::<a id="25c31" class="tk">step</a>()</td></tr>
+<td>25</td><td><span class="ct"> * This function updates continuous states using the ODE2 fixed-step</span></td></tr>
 <tr name="26" id="26">
-<td>26</td><td><span class="br">{</span></td></tr>
+<td>26</td><td><span class="ct"> * solver algorithm</span></td></tr>
 <tr name="27" id="27">
-<td>27</td><td>  <a id="27c3" class="tk">real_T</a> <a id="27c10" class="tk">Sphi</a>;</td></tr>
+<td>27</td><td><span class="ct"> */</span></td></tr>
 <tr name="28" id="28">
-<td>28</td><td>  <a id="28c3" class="tk">real_T</a> <a id="28c10" class="tk">Cphi</a>;</td></tr>
+<td>28</td><td><span class="kw">void</span> <a id="28c6" class="tk">Position_TiltModelClass</a>::<a id="28c31" class="tk">rt_ertODEUpdateContinuousStates</a>(<a id="28c63" class="tk">RTWSolverInfo</a> <a id="28c77" class="tk">*</a><a id="28c78" class="tk">si</a> )</td></tr>
 <tr name="29" id="29">
-<td>29</td><td>  <a id="29c3" class="tk">real_T</a> <a id="29c10" class="tk">Stheta</a>;</td></tr>
+<td>29</td><td><span class="br">{</span></td></tr>
 <tr name="30" id="30">
-<td>30</td><td>  <a id="30c3" class="tk">real_T</a> <a id="30c10" class="tk">Ctheta</a>;</td></tr>
+<td>30</td><td>  <a id="30c3" class="tk">time_T</a> <a id="30c10" class="tk">tnew</a> = <a id="30c17" class="tk">rtsiGetSolverStopTime</a>(<a id="30c39" class="tk">si</a>);</td></tr>
 <tr name="31" id="31">
-<td>31</td><td>  <a id="31c3" class="tk">real_T</a> <a id="31c10" class="tk">Spsi</a>;</td></tr>
+<td>31</td><td>  <a id="31c3" class="tk">time_T</a> <a id="31c10" class="tk">h</a> = <a id="31c14" class="tk">rtsiGetStepSize</a>(<a id="31c30" class="tk">si</a>);</td></tr>
 <tr name="32" id="32">
-<td>32</td><td>  <a id="32c3" class="tk">real_T</a> <a id="32c10" class="tk">Cpsi</a>;</td></tr>
+<td>32</td><td>  <a id="32c3" class="tk">real_T</a> <a id="32c10" class="tk">*</a><a id="32c11" class="tk">x</a> = <a id="32c15" class="tk">rtsiGetContStates</a>(<a id="32c33" class="tk">si</a>);</td></tr>
 <tr name="33" id="33">
-<td>33</td><td>  <a id="33c3" class="tk">real_T</a> <a id="33c10" class="tk">Pos_body</a>[3];</td></tr>
+<td>33</td><td>  <a id="33c3" class="tk">ODE2_IntgData</a> <a id="33c17" class="tk">*</a><a id="33c18" class="tk">id</a> = (<a id="33c24" class="tk">ODE2_IntgData</a> <a id="33c38" class="tk">*</a>)<a id="33c40" class="tk">rtsiGetSolverData</a>(<a id="33c58" class="tk">si</a>);</td></tr>
 <tr name="34" id="34">
-<td>34</td><td>  <a id="34c3" class="tk">real_T</a> <a id="34c10" class="tk">Cpsi_0</a>[9];</td></tr>
+<td>34</td><td>  <a id="34c3" class="tk">real_T</a> <a id="34c10" class="tk">*</a><a id="34c11" class="tk">y</a> = <a id="34c15" class="tk">id</a>-&gt;<a id="34c19" class="tk">y</a>;</td></tr>
 <tr name="35" id="35">
-<td>35</td><td>  <a id="35c3" class="tk">int32_T</a> <a id="35c11" class="tk">i</a>;</td></tr>
+<td>35</td><td>  <a id="35c3" class="tk">real_T</a> <a id="35c10" class="tk">*</a><a id="35c11" class="tk">f0</a> = <a id="35c16" class="tk">id</a>-&gt;<a id="35c20" class="tk">f</a>[0];</td></tr>
 <tr name="36" id="36">
-<td>36</td><td></td></tr>
+<td>36</td><td>  <a id="36c3" class="tk">real_T</a> <a id="36c10" class="tk">*</a><a id="36c11" class="tk">f1</a> = <a id="36c16" class="tk">id</a>-&gt;<a id="36c20" class="tk">f</a>[1];</td></tr>
 <tr name="37" id="37">
-<td>37</td><td>  <span class="ct">/* MATLAB Function: '&lt;S1&gt;/NED to body' incorporates:</span></td></tr>
+<td>37</td><td>  <a id="37c3" class="tk">real_T</a> <a id="37c10" class="tk">temp</a>;</td></tr>
 <tr name="38" id="38">
-<td>38</td><td><span class="ct">   *  Constant: '&lt;S1&gt;/Constant'</span></td></tr>
+<td>38</td><td>  <a id="38c3" class="tk">int_T</a> <a id="38c9" class="tk">i</a>;</td></tr>
 <tr name="39" id="39">
-<td>39</td><td><span class="ct">   *  Inport: '&lt;Root&gt;/IMU_Att'</span></td></tr>
+<td>39</td><td>  <a id="39c3" class="tk">int_T</a> <a id="39c9" class="tk">nXc</a> = 2;</td></tr>
 <tr name="40" id="40">
-<td>40</td><td><span class="ct">   *  Inport: '&lt;Root&gt;/PosRef'</span></td></tr>
+<td>40</td><td>  <a id="40c3" class="tk">rtsiSetSimTimeStep</a>(<a id="40c22" class="tk">si</a>,<a id="40c25" class="tk">MINOR_TIME_STEP</a>);</td></tr>
 <tr name="41" id="41">
-<td>41</td><td><span class="ct">   */</span></td></tr>
+<td>41</td><td></td></tr>
 <tr name="42" id="42">
-<td>42</td><td>  <span class="ct">/* MATLAB Function 'Position Controller Tilt/NED to body': '&lt;S2&gt;:1' */</span></td></tr>
+<td>42</td><td>  <span class="ct">/* Save the state values at time t in y, we'll use x as ynew. */</span></td></tr>
 <tr name="43" id="43">
-<td>43</td><td>  <span class="ct">/* '&lt;S2&gt;:1:3' */</span></td></tr>
+<td>43</td><td>  (<span class="kw">void</span>) <a id="43c10" class="tk">memcpy</a>(<a id="43c17" class="tk">y</a>, <a id="43c20" class="tk">x</a>,</td></tr>
 <tr name="44" id="44">
-<td>44</td><td>  <span class="ct">/* % Rotate Acc_body to Earth frame */</span></td></tr>
+<td>44</td><td>                (<a id="44c18" class="tk">uint_T</a>)<a id="44c25" class="tk">nXc</a><a id="44c28" class="tk">*</a><span class="kw">sizeof</span>(<a id="44c36" class="tk">real_T</a>));</td></tr>
 <tr name="45" id="45">
-<td>45</td><td>  <span class="ct">/* '&lt;S2&gt;:1:8' */</span></td></tr>
+<td>45</td><td></td></tr>
 <tr name="46" id="46">
-<td>46</td><td>  <a id="46c3" class="tk">Sphi</a> = <a id="46c10" class="tk">sin</a>(<a id="46c14" class="tk">Position_Tilt_U</a>.<a id="46c30" class="tk">IMU_Att</a>[0]);</td></tr>
+<td>46</td><td>  <span class="ct">/* Assumes that rtsiSetT and ModelOutputs are up-to-date */</span></td></tr>
 <tr name="47" id="47">
-<td>47</td><td></td></tr>
+<td>47</td><td>  <span class="ct">/* f0 = f(t,y) */</span></td></tr>
 <tr name="48" id="48">
-<td>48</td><td>  <span class="ct">/* '&lt;S2&gt;:1:9' */</span></td></tr>
+<td>48</td><td>  <a id="48c3" class="tk">rtsiSetdX</a>(<a id="48c13" class="tk">si</a>, <a id="48c17" class="tk">f0</a>);</td></tr>
 <tr name="49" id="49">
-<td>49</td><td>  <a id="49c3" class="tk">Cphi</a> = <a id="49c10" class="tk">cos</a>(<a id="49c14" class="tk">Position_Tilt_U</a>.<a id="49c30" class="tk">IMU_Att</a>[0]);</td></tr>
+<td>49</td><td>  <a id="49c3" class="tk">Position_Tilt_derivatives</a>();</td></tr>
 <tr name="50" id="50">
 <td>50</td><td></td></tr>
 <tr name="51" id="51">
-<td>51</td><td>  <span class="ct">/* '&lt;S2&gt;:1:10' */</span></td></tr>
+<td>51</td><td>  <span class="ct">/* f1 = f(t + h, y + h*f0) */</span></td></tr>
 <tr name="52" id="52">
-<td>52</td><td>  <a id="52c3" class="tk">Stheta</a> = <a id="52c12" class="tk">sin</a>(<a id="52c16" class="tk">Position_Tilt_U</a>.<a id="52c32" class="tk">IMU_Att</a>[1]);</td></tr>
+<td>52</td><td>  <span class="kw">for</span> (<a id="52c8" class="tk">i</a> = 0; <a id="52c15" class="tk">i</a> <a id="52c17" class="tk">&lt;</a> <a id="52c19" class="tk">nXc</a>; <a id="52c24" class="tk">i</a><a id="52c25" class="tk">++</a>) <span class="br">{</span></td></tr>
 <tr name="53" id="53">
-<td>53</td><td></td></tr>
+<td>53</td><td>    <a id="53c5" class="tk">x</a>[<a id="53c7" class="tk">i</a>] = <a id="53c12" class="tk">y</a>[<a id="53c14" class="tk">i</a>] <a id="53c17" class="tk">+</a> (<a id="53c20" class="tk">h</a><a id="53c21" class="tk">*</a><a id="53c22" class="tk">f0</a>[<a id="53c25" class="tk">i</a>]);</td></tr>
 <tr name="54" id="54">
-<td>54</td><td>  <span class="ct">/* '&lt;S2&gt;:1:11' */</span></td></tr>
+<td>54</td><td>  <span class="br">}</span></td></tr>
 <tr name="55" id="55">
-<td>55</td><td>  <a id="55c3" class="tk">Ctheta</a> = <a id="55c12" class="tk">cos</a>(<a id="55c16" class="tk">Position_Tilt_U</a>.<a id="55c32" class="tk">IMU_Att</a>[1]);</td></tr>
+<td>55</td><td></td></tr>
 <tr name="56" id="56">
-<td>56</td><td></td></tr>
+<td>56</td><td>  <a id="56c3" class="tk">rtsiSetT</a>(<a id="56c12" class="tk">si</a>, <a id="56c16" class="tk">tnew</a>);</td></tr>
 <tr name="57" id="57">
-<td>57</td><td>  <span class="ct">/* '&lt;S2&gt;:1:12' */</span></td></tr>
+<td>57</td><td>  <a id="57c3" class="tk">rtsiSetdX</a>(<a id="57c13" class="tk">si</a>, <a id="57c17" class="tk">f1</a>);</td></tr>
 <tr name="58" id="58">
-<td>58</td><td>  <a id="58c3" class="tk">Spsi</a> = <a id="58c10" class="tk">sin</a>(<a id="58c14" class="tk">Position_Tilt_U</a>.<a id="58c30" class="tk">IMU_Att</a>[2]);</td></tr>
+<td>58</td><td>  <span class="kw">this</span>-&gt;<a id="58c9" class="tk">step</a>();</td></tr>
 <tr name="59" id="59">
-<td>59</td><td></td></tr>
+<td>59</td><td>  <a id="59c3" class="tk">Position_Tilt_derivatives</a>();</td></tr>
 <tr name="60" id="60">
-<td>60</td><td>  <span class="ct">/* '&lt;S2&gt;:1:13' */</span></td></tr>
+<td>60</td><td></td></tr>
 <tr name="61" id="61">
-<td>61</td><td>  <a id="61c3" class="tk">Cpsi</a> = <a id="61c10" class="tk">cos</a>(<a id="61c14" class="tk">Position_Tilt_U</a>.<a id="61c30" class="tk">IMU_Att</a>[2]);</td></tr>
+<td>61</td><td>  <span class="ct">/* tnew = t + h</span></td></tr>
 <tr name="62" id="62">
-<td>62</td><td></td></tr>
+<td>62</td><td><span class="ct">     ynew = y + (h/2)*(f0 + f1) */</span></td></tr>
 <tr name="63" id="63">
-<td>63</td><td>  <span class="ct">/* '&lt;S2&gt;:1:15' */</span></td></tr>
+<td>63</td><td>  <a id="63c3" class="tk">temp</a> = 0.5<a id="63c13" class="tk">*</a><a id="63c14" class="tk">h</a>;</td></tr>
 <tr name="64" id="64">
-<td>64</td><td>  <span class="ct">/*  Acc_Earth = zeros(3,1); */</span></td></tr>
+<td>64</td><td>  <span class="kw">for</span> (<a id="64c8" class="tk">i</a> = 0; <a id="64c15" class="tk">i</a> <a id="64c17" class="tk">&lt;</a> <a id="64c19" class="tk">nXc</a>; <a id="64c24" class="tk">i</a><a id="64c25" class="tk">++</a>) <span class="br">{</span></td></tr>
 <tr name="65" id="65">
-<td>65</td><td>  <span class="ct">/* '&lt;S2&gt;:1:25' */</span></td></tr>
+<td>65</td><td>    <a id="65c5" class="tk">x</a>[<a id="65c7" class="tk">i</a>] = <a id="65c12" class="tk">y</a>[<a id="65c14" class="tk">i</a>] <a id="65c17" class="tk">+</a> <a id="65c19" class="tk">temp</a><a id="65c23" class="tk">*</a>(<a id="65c25" class="tk">f0</a>[<a id="65c28" class="tk">i</a>] <a id="65c31" class="tk">+</a> <a id="65c33" class="tk">f1</a>[<a id="65c36" class="tk">i</a>]);</td></tr>
 <tr name="66" id="66">
-<td>66</td><td>  <a id="66c3" class="tk">Cpsi_0</a>[0] = <a id="66c15" class="tk">Cpsi</a> <a id="66c20" class="tk">*</a> <a id="66c22" class="tk">Ctheta</a>;</td></tr>
+<td>66</td><td>  <span class="br">}</span></td></tr>
 <tr name="67" id="67">
-<td>67</td><td>  <a id="67c3" class="tk">Cpsi_0</a>[3] = <a id="67c15" class="tk">Ctheta</a> <a id="67c22" class="tk">*</a> <a id="67c24" class="tk">Spsi</a>;</td></tr>
+<td>67</td><td></td></tr>
 <tr name="68" id="68">
-<td>68</td><td>  <a id="68c3" class="tk">Cpsi_0</a>[6] = <a id="68c15" class="tk">-</a><a id="68c16" class="tk">Stheta</a>;</td></tr>
+<td>68</td><td>  <a id="68c3" class="tk">rtsiSetSimTimeStep</a>(<a id="68c22" class="tk">si</a>,<a id="68c25" class="tk">MAJOR_TIME_STEP</a>);</td></tr>
 <tr name="69" id="69">
-<td>69</td><td>  <a id="69c3" class="tk">Cpsi_0</a>[1] = <a id="69c15" class="tk">Cpsi</a> <a id="69c20" class="tk">*</a> <a id="69c22" class="tk">Sphi</a> <a id="69c27" class="tk">*</a> <a id="69c29" class="tk">Stheta</a> <a id="69c36" class="tk">-</a> <a id="69c38" class="tk">Cphi</a> <a id="69c43" class="tk">*</a> <a id="69c45" class="tk">Spsi</a>;</td></tr>
+<td>69</td><td><span class="br">}</span></td></tr>
 <tr name="70" id="70">
-<td>70</td><td>  <a id="70c3" class="tk">Cpsi_0</a>[4] = <a id="70c15" class="tk">Sphi</a> <a id="70c20" class="tk">*</a> <a id="70c22" class="tk">Spsi</a> <a id="70c27" class="tk">*</a> <a id="70c29" class="tk">Stheta</a> <a id="70c36" class="tk">+</a> <a id="70c38" class="tk">Cphi</a> <a id="70c43" class="tk">*</a> <a id="70c45" class="tk">Cpsi</a>;</td></tr>
+<td>70</td><td></td></tr>
 <tr name="71" id="71">
-<td>71</td><td>  <a id="71c3" class="tk">Cpsi_0</a>[7] = <a id="71c15" class="tk">Ctheta</a> <a id="71c22" class="tk">*</a> <a id="71c24" class="tk">Sphi</a>;</td></tr>
+<td>71</td><td><span class="ct">/* Model step function */</span></td></tr>
 <tr name="72" id="72">
-<td>72</td><td>  <a id="72c3" class="tk">Cpsi_0</a>[2] = <a id="72c15" class="tk">Cphi</a> <a id="72c20" class="tk">*</a> <a id="72c22" class="tk">Cpsi</a> <a id="72c27" class="tk">*</a> <a id="72c29" class="tk">Stheta</a> <a id="72c36" class="tk">+</a> <a id="72c38" class="tk">Sphi</a> <a id="72c43" class="tk">*</a> <a id="72c45" class="tk">Spsi</a>;</td></tr>
+<td>72</td><td><span class="kw">void</span> <a id="72c6" class="tk">Position_TiltModelClass</a>::<a id="72c31" class="tk">step</a>()</td></tr>
 <tr name="73" id="73">
-<td>73</td><td>  <a id="73c3" class="tk">Cpsi_0</a>[5] = <a id="73c15" class="tk">Cphi</a> <a id="73c20" class="tk">*</a> <a id="73c22" class="tk">Spsi</a> <a id="73c27" class="tk">*</a> <a id="73c29" class="tk">Stheta</a> <a id="73c36" class="tk">-</a> <a id="73c38" class="tk">Cpsi</a> <a id="73c43" class="tk">*</a> <a id="73c45" class="tk">Sphi</a>;</td></tr>
+<td>73</td><td><span class="br">{</span></td></tr>
 <tr name="74" id="74">
-<td>74</td><td>  <a id="74c3" class="tk">Cpsi_0</a>[8] = <a id="74c15" class="tk">Cphi</a> <a id="74c20" class="tk">*</a> <a id="74c22" class="tk">Ctheta</a>;</td></tr>
+<td>74</td><td>  <a id="74c3" class="tk">real_T</a> <a id="74c10" class="tk">rtb_Filter</a>;</td></tr>
 <tr name="75" id="75">
-<td>75</td><td>  <span class="kw">for</span> (<a id="75c8" class="tk">i</a> = 0; <a id="75c15" class="tk">i</a> <a id="75c17" class="tk">&lt;</a> 3; <a id="75c22" class="tk">i</a><a id="75c23" class="tk">++</a>) <span class="br">{</span></td></tr>
+<td>75</td><td>  <span class="kw">if</span> (<a id="75c7" class="tk">rtmIsMajorTimeStep</a>((<a id="75c27" class="tk">&amp;</a><a id="75c28" class="tk">Position_Tilt_M</a>))) <span class="br">{</span></td></tr>
 <tr name="76" id="76">
-<td>76</td><td>    <a id="76c5" class="tk">Pos_body</a>[<a id="76c14" class="tk">i</a>] = <a id="76c19" class="tk">Cpsi_0</a>[<a id="76c26" class="tk">i</a> <a id="76c28" class="tk">+</a> 6] <a id="76c33" class="tk">*</a> <a id="76c35" class="tk">Position_Tilt_P</a>.<a id="76c51" class="tk">Constant_Value</a> <a id="76c66" class="tk">+</a> (<a id="76c69" class="tk">Cpsi_0</a>[<a id="76c76" class="tk">i</a> <a id="76c78" class="tk">+</a> 3]</td></tr>
+<td>76</td><td>    <span class="ct">/* set solver stop time */</span></td></tr>
 <tr name="77" id="77">
-<td>77</td><td>      <a id="77c7" class="tk">*</a> <a id="77c9" class="tk">Position_Tilt_U</a>.<a id="77c25" class="tk">PosRef</a>[1] <a id="77c35" class="tk">+</a> <a id="77c37" class="tk">Cpsi_0</a>[<a id="77c44" class="tk">i</a>] <a id="77c47" class="tk">*</a> <a id="77c49" class="tk">Position_Tilt_U</a>.<a id="77c65" class="tk">PosRef</a>[0]);</td></tr>
+<td>77</td><td>    <span class="kw">if</span> (<a id="77c9" class="tk">!</a>((<a id="77c12" class="tk">&amp;</a><a id="77c13" class="tk">Position_Tilt_M</a>)-&gt;<a id="77c31" class="tk">Timing</a>.<a id="77c38" class="tk">clockTick0</a><a id="77c48" class="tk">+</a>1)) <span class="br">{</span></td></tr>
 <tr name="78" id="78">
-<td>78</td><td>  <span class="br">}</span></td></tr>
+<td>78</td><td>      <a id="78c7" class="tk">rtsiSetSolverStopTime</a>(<a id="78c29" class="tk">&amp;</a>(<a id="78c31" class="tk">&amp;</a><a id="78c32" class="tk">Position_Tilt_M</a>)-&gt;<a id="78c50" class="tk">solverInfo</a>, (((<a id="78c65" class="tk">&amp;</a><a id="78c66" class="tk">Position_Tilt_M</a>)</td></tr>
 <tr name="79" id="79">
-<td>79</td><td></td></tr>
+<td>79</td><td>        -&gt;<a id="79c11" class="tk">Timing</a>.<a id="79c18" class="tk">clockTickH0</a> <a id="79c30" class="tk">+</a> 1) <a id="79c35" class="tk">*</a> (<a id="79c38" class="tk">&amp;</a><a id="79c39" class="tk">Position_Tilt_M</a>)-&gt;<a id="79c57" class="tk">Timing</a>.<a id="79c64" class="tk">stepSize0</a> <a id="79c74" class="tk">*</a></td></tr>
 <tr name="80" id="80">
-<td>80</td><td>  <span class="ct">/* Outport: '&lt;Root&gt;/u_des' incorporates:</span></td></tr>
+<td>80</td><td>        4294967296.0));</td></tr>
 <tr name="81" id="81">
-<td>81</td><td><span class="ct">   *  MATLAB Function: '&lt;S1&gt;/NED to body'</span></td></tr>
+<td>81</td><td>    <span class="br">}</span> <span class="kw">else</span> <span class="br">{</span></td></tr>
 <tr name="82" id="82">
-<td>82</td><td><span class="ct">   */</span></td></tr>
+<td>82</td><td>      <a id="82c7" class="tk">rtsiSetSolverStopTime</a>(<a id="82c29" class="tk">&amp;</a>(<a id="82c31" class="tk">&amp;</a><a id="82c32" class="tk">Position_Tilt_M</a>)-&gt;<a id="82c50" class="tk">solverInfo</a>, (((<a id="82c65" class="tk">&amp;</a><a id="82c66" class="tk">Position_Tilt_M</a>)</td></tr>
 <tr name="83" id="83">
-<td>83</td><td>  <span class="ct">/* '&lt;S2&gt;:1:27' */</span></td></tr>
+<td>83</td><td>        -&gt;<a id="83c11" class="tk">Timing</a>.<a id="83c18" class="tk">clockTick0</a> <a id="83c29" class="tk">+</a> 1) <a id="83c34" class="tk">*</a> (<a id="83c37" class="tk">&amp;</a><a id="83c38" class="tk">Position_Tilt_M</a>)-&gt;<a id="83c56" class="tk">Timing</a>.<a id="83c63" class="tk">stepSize0</a> <a id="83c73" class="tk">+</a></td></tr>
 <tr name="84" id="84">
-<td>84</td><td>  <span class="ct">/* '&lt;S2&gt;:1:28' */</span></td></tr>
+<td>84</td><td>        (<a id="84c10" class="tk">&amp;</a><a id="84c11" class="tk">Position_Tilt_M</a>)-&gt;<a id="84c29" class="tk">Timing</a>.<a id="84c36" class="tk">clockTickH0</a> <a id="84c48" class="tk">*</a> (<a id="84c51" class="tk">&amp;</a><a id="84c52" class="tk">Position_Tilt_M</a>)</td></tr>
 <tr name="85" id="85">
-<td>85</td><td>  <span class="ct">/* '&lt;S2&gt;:1:29' */</span></td></tr>
+<td>85</td><td>        -&gt;<a id="85c11" class="tk">Timing</a>.<a id="85c18" class="tk">stepSize0</a> <a id="85c28" class="tk">*</a> 4294967296.0));</td></tr>
 <tr name="86" id="86">
-<td>86</td><td>  <a id="86c3" class="tk">Position_Tilt_Y</a>.<a id="86c19" class="tk">u_des</a> = <a id="86c27" class="tk">Pos_body</a>[0];</td></tr>
+<td>86</td><td>    <span class="br">}</span></td></tr>
 <tr name="87" id="87">
-<td>87</td><td></td></tr>
+<td>87</td><td>  <span class="br">}</span>                                    <span class="ct">/* end MajorTimeStep */</span></td></tr>
 <tr name="88" id="88">
-<td>88</td><td>  <span class="ct">/* Outport: '&lt;Root&gt;/v_des' incorporates:</span></td></tr>
+<td>88</td><td></td></tr>
 <tr name="89" id="89">
-<td>89</td><td><span class="ct">   *  MATLAB Function: '&lt;S1&gt;/NED to body'</span></td></tr>
+<td>89</td><td>  <span class="ct">/* Update absolute time of base rate at minor time step */</span></td></tr>
 <tr name="90" id="90">
-<td>90</td><td><span class="ct">   */</span></td></tr>
+<td>90</td><td>  <span class="kw">if</span> (<a id="90c7" class="tk">rtmIsMinorTimeStep</a>((<a id="90c27" class="tk">&amp;</a><a id="90c28" class="tk">Position_Tilt_M</a>))) <span class="br">{</span></td></tr>
 <tr name="91" id="91">
-<td>91</td><td>  <a id="91c3" class="tk">Position_Tilt_Y</a>.<a id="91c19" class="tk">v_des</a> = <a id="91c27" class="tk">Pos_body</a>[1];</td></tr>
+<td>91</td><td>    (<a id="91c6" class="tk">&amp;</a><a id="91c7" class="tk">Position_Tilt_M</a>)-&gt;<a id="91c25" class="tk">Timing</a>.<a id="91c32" class="tk">t</a>[0] = <a id="91c39" class="tk">rtsiGetT</a>(<a id="91c48" class="tk">&amp;</a>(<a id="91c50" class="tk">&amp;</a><a id="91c51" class="tk">Position_Tilt_M</a>)-&gt;<a id="91c69" class="tk">solverInfo</a>);</td></tr>
 <tr name="92" id="92">
-<td>92</td><td><span class="br">}</span></td></tr>
+<td>92</td><td>  <span class="br">}</span></td></tr>
 <tr name="93" id="93">
 <td>93</td><td></td></tr>
 <tr name="94" id="94">
-<td>94</td><td><span class="ct">/* Model initialize function */</span></td></tr>
+<td>94</td><td>  <span class="ct">/* Sum: '&lt;S1&gt;/Sum' incorporates:</span></td></tr>
 <tr name="95" id="95">
-<td>95</td><td><span class="kw">void</span> <a id="95c6" class="tk">Position_TiltModelClass</a>::<a id="95c31" class="tk">initialize</a>()</td></tr>
+<td>95</td><td><span class="ct">   *  Inport: '&lt;Root&gt;/Pos'</span></td></tr>
 <tr name="96" id="96">
-<td>96</td><td><span class="br">{</span></td></tr>
+<td>96</td><td><span class="ct">   *  Inport: '&lt;Root&gt;/PosRef'</span></td></tr>
 <tr name="97" id="97">
-<td>97</td><td>  <span class="ct">/* Registration code */</span></td></tr>
+<td>97</td><td><span class="ct">   */</span></td></tr>
 <tr name="98" id="98">
-<td>98</td><td></td></tr>
+<td>98</td><td>  <a id="98c3" class="tk">rtb_Filter</a> = <a id="98c16" class="tk">Position_Tilt_U</a>.<a id="98c32" class="tk">PosRef</a>[0] <a id="98c42" class="tk">-</a> <a id="98c44" class="tk">Position_Tilt_U</a>.<a id="98c60" class="tk">Pos</a>[0];</td></tr>
 <tr name="99" id="99">
-<td>99</td><td>  <span class="ct">/* initialize error status */</span></td></tr>
+<td>99</td><td></td></tr>
 <tr name="100" id="100">
-<td>100</td><td>  <a id="100c3" class="tk">rtmSetErrorStatus</a>((<a id="100c22" class="tk">&amp;</a><a id="100c23" class="tk">Position_Tilt_M</a>), (<a id="100c42" class="tk">NULL</a>));</td></tr>
+<td>100</td><td>  <span class="ct">/* Gain: '&lt;S2&gt;/Filter Coefficient' incorporates:</span></td></tr>
 <tr name="101" id="101">
-<td>101</td><td></td></tr>
+<td>101</td><td><span class="ct">   *  Gain: '&lt;S2&gt;/Derivative Gain'</span></td></tr>
 <tr name="102" id="102">
-<td>102</td><td>  <span class="ct">/* external inputs */</span></td></tr>
+<td>102</td><td><span class="ct">   *  Integrator: '&lt;S2&gt;/Filter'</span></td></tr>
 <tr name="103" id="103">
-<td>103</td><td>  (<span class="kw">void</span>) <a id="103c10" class="tk">memset</a>((<span class="kw">void</span> <a id="103c23" class="tk">*</a>)<a id="103c25" class="tk">&amp;</a><a id="103c26" class="tk">Position_Tilt_U</a>, 0,</td></tr>
+<td>103</td><td><span class="ct">   *  Sum: '&lt;S2&gt;/SumD'</span></td></tr>
 <tr name="104" id="104">
-<td>104</td><td>                <span class="kw">sizeof</span>(<a id="104c24" class="tk">ExtU_Position_Tilt_T</a>));</td></tr>
+<td>104</td><td><span class="ct">   */</span></td></tr>
 <tr name="105" id="105">
-<td>105</td><td></td></tr>
+<td>105</td><td>  <a id="105c3" class="tk">Position_Tilt_B</a>.<a id="105c19" class="tk">FilterCoefficient</a> = (<a id="105c40" class="tk">Position_Tilt_P</a>.<a id="105c56" class="tk">Kd_N</a> <a id="105c61" class="tk">*</a> <a id="105c63" class="tk">rtb_Filter</a> <a id="105c74" class="tk">-</a></td></tr>
 <tr name="106" id="106">
-<td>106</td><td>  <span class="ct">/* external outputs */</span></td></tr>
+<td>106</td><td>    <a id="106c5" class="tk">Position_Tilt_X</a>.<a id="106c21" class="tk">Filter_CSTATE</a>) <a id="106c36" class="tk">*</a> <a id="106c38" class="tk">Position_Tilt_P</a>.<a id="106c54" class="tk">PIDController_N</a>;</td></tr>
 <tr name="107" id="107">
-<td>107</td><td>  (<span class="kw">void</span>) <a id="107c10" class="tk">memset</a>((<span class="kw">void</span> <a id="107c23" class="tk">*</a>)<a id="107c25" class="tk">&amp;</a><a id="107c26" class="tk">Position_Tilt_Y</a>, 0,</td></tr>
+<td>107</td><td></td></tr>
 <tr name="108" id="108">
-<td>108</td><td>                <span class="kw">sizeof</span>(<a id="108c24" class="tk">ExtY_Position_Tilt_T</a>));</td></tr>
+<td>108</td><td>  <span class="ct">/* Outport: '&lt;Root&gt;/u_des' incorporates:</span></td></tr>
 <tr name="109" id="109">
-<td>109</td><td><span class="br">}</span></td></tr>
+<td>109</td><td><span class="ct">   *  Gain: '&lt;S2&gt;/Proportional Gain'</span></td></tr>
 <tr name="110" id="110">
-<td>110</td><td></td></tr>
+<td>110</td><td><span class="ct">   *  Sum: '&lt;S2&gt;/Sum'</span></td></tr>
 <tr name="111" id="111">
-<td>111</td><td><span class="ct">/* Model terminate function */</span></td></tr>
+<td>111</td><td><span class="ct">   */</span></td></tr>
 <tr name="112" id="112">
-<td>112</td><td><span class="kw">void</span> <a id="112c6" class="tk">Position_TiltModelClass</a>::<a id="112c31" class="tk">terminate</a>()</td></tr>
+<td>112</td><td>  <a id="112c3" class="tk">Position_Tilt_Y</a>.<a id="112c19" class="tk">u_des</a> = <a id="112c27" class="tk">Position_Tilt_P</a>.<a id="112c43" class="tk">Kp_N</a> <a id="112c48" class="tk">*</a> <a id="112c50" class="tk">rtb_Filter</a> <a id="112c61" class="tk">+</a></td></tr>
 <tr name="113" id="113">
-<td>113</td><td><span class="br">{</span></td></tr>
+<td>113</td><td>    <a id="113c5" class="tk">Position_Tilt_B</a>.<a id="113c21" class="tk">FilterCoefficient</a>;</td></tr>
 <tr name="114" id="114">
-<td>114</td><td>  <span class="ct">/* (no terminate code required) */</span></td></tr>
+<td>114</td><td></td></tr>
 <tr name="115" id="115">
-<td>115</td><td><span class="br">}</span></td></tr>
+<td>115</td><td>  <span class="ct">/* Sum: '&lt;S1&gt;/Sum1' incorporates:</span></td></tr>
 <tr name="116" id="116">
-<td>116</td><td></td></tr>
+<td>116</td><td><span class="ct">   *  Inport: '&lt;Root&gt;/Pos'</span></td></tr>
 <tr name="117" id="117">
-<td>117</td><td><span class="ct">/* Constructor */</span></td></tr>
+<td>117</td><td><span class="ct">   *  Inport: '&lt;Root&gt;/PosRef'</span></td></tr>
 <tr name="118" id="118">
-<td>118</td><td><a id="118c1" class="tk">Position_TiltModelClass</a>::<a id="118c26" class="tk">Position_TiltModelClass</a>()</td></tr>
+<td>118</td><td><span class="ct">   */</span></td></tr>
 <tr name="119" id="119">
-<td>119</td><td><span class="br">{</span></td></tr>
+<td>119</td><td>  <a id="119c3" class="tk">rtb_Filter</a> = <a id="119c16" class="tk">Position_Tilt_U</a>.<a id="119c32" class="tk">PosRef</a>[1] <a id="119c42" class="tk">-</a> <a id="119c44" class="tk">Position_Tilt_U</a>.<a id="119c60" class="tk">Pos</a>[1];</td></tr>
 <tr name="120" id="120">
-<td>120</td><td>  <span class="kw">static</span> <span class="kw">const</span> <a id="120c16" class="tk">P_Position_Tilt_T</a> <a id="120c34" class="tk">Position_Tilt_P_temp</a> = <span class="br">{</span></td></tr>
+<td>120</td><td></td></tr>
 <tr name="121" id="121">
-<td>121</td><td>    0.0                                <span class="ct">/* Expression: 0</span></td></tr>
+<td>121</td><td>  <span class="ct">/* Gain: '&lt;S3&gt;/Filter Coefficient' incorporates:</span></td></tr>
 <tr name="122" id="122">
-<td>122</td><td><span class="ct">                                        * Referenced by: '&lt;S1&gt;/Constant'</span></td></tr>
+<td>122</td><td><span class="ct">   *  Gain: '&lt;S3&gt;/Derivative Gain'</span></td></tr>
 <tr name="123" id="123">
-<td>123</td><td><span class="ct">                                        */</span></td></tr>
+<td>123</td><td><span class="ct">   *  Integrator: '&lt;S3&gt;/Filter'</span></td></tr>
 <tr name="124" id="124">
-<td>124</td><td>  <span class="br">}</span>;                                   <span class="ct">/* Modifiable parameters */</span></td></tr>
+<td>124</td><td><span class="ct">   *  Sum: '&lt;S3&gt;/SumD'</span></td></tr>
 <tr name="125" id="125">
-<td>125</td><td></td></tr>
+<td>125</td><td><span class="ct">   */</span></td></tr>
 <tr name="126" id="126">
-<td>126</td><td>  <span class="ct">/* Initialize tunable parameters */</span></td></tr>
+<td>126</td><td>  <a id="126c3" class="tk">Position_Tilt_B</a>.<a id="126c19" class="tk">FilterCoefficient_f</a> = (<a id="126c42" class="tk">Position_Tilt_P</a>.<a id="126c58" class="tk">Kd_E</a> <a id="126c63" class="tk">*</a> <a id="126c65" class="tk">rtb_Filter</a> <a id="126c76" class="tk">-</a></td></tr>
 <tr name="127" id="127">
-<td>127</td><td>  <a id="127c3" class="tk">Position_Tilt_P</a> = <a id="127c21" class="tk">Position_Tilt_P_temp</a>;</td></tr>
+<td>127</td><td>    <a id="127c5" class="tk">Position_Tilt_X</a>.<a id="127c21" class="tk">Filter_CSTATE_b</a>) <a id="127c38" class="tk">*</a> <a id="127c40" class="tk">Position_Tilt_P</a>.<a id="127c56" class="tk">PIDController1_N</a>;</td></tr>
 <tr name="128" id="128">
-<td>128</td><td><span class="br">}</span></td></tr>
+<td>128</td><td></td></tr>
 <tr name="129" id="129">
-<td>129</td><td></td></tr>
+<td>129</td><td>  <span class="ct">/* Outport: '&lt;Root&gt;/v_des' incorporates:</span></td></tr>
 <tr name="130" id="130">
-<td>130</td><td><span class="ct">/* Destructor */</span></td></tr>
+<td>130</td><td><span class="ct">   *  Gain: '&lt;S3&gt;/Proportional Gain'</span></td></tr>
 <tr name="131" id="131">
-<td>131</td><td><a id="131c1" class="tk">Position_TiltModelClass</a>::<a id="131c26" class="tk">~</a><a id="131c27" class="tk">Position_TiltModelClass</a>()</td></tr>
+<td>131</td><td><span class="ct">   *  Sum: '&lt;S3&gt;/Sum'</span></td></tr>
 <tr name="132" id="132">
-<td>132</td><td><span class="br">{</span></td></tr>
+<td>132</td><td><span class="ct">   */</span></td></tr>
 <tr name="133" id="133">
-<td>133</td><td>  <span class="ct">/* Currently there is no destructor body generated.*/</span></td></tr>
+<td>133</td><td>  <a id="133c3" class="tk">Position_Tilt_Y</a>.<a id="133c19" class="tk">v_des</a> = <a id="133c27" class="tk">Position_Tilt_P</a>.<a id="133c43" class="tk">Kp_E</a> <a id="133c48" class="tk">*</a> <a id="133c50" class="tk">rtb_Filter</a> <a id="133c61" class="tk">+</a></td></tr>
 <tr name="134" id="134">
-<td>134</td><td><span class="br">}</span></td></tr>
+<td>134</td><td>    <a id="134c5" class="tk">Position_Tilt_B</a>.<a id="134c21" class="tk">FilterCoefficient_f</a>;</td></tr>
 <tr name="135" id="135">
-<td>135</td><td></td></tr>
+<td>135</td><td>  <span class="kw">if</span> (<a id="135c7" class="tk">rtmIsMajorTimeStep</a>((<a id="135c27" class="tk">&amp;</a><a id="135c28" class="tk">Position_Tilt_M</a>))) <span class="br">{</span></td></tr>
 <tr name="136" id="136">
-<td>136</td><td><span class="ct">/* Real-Time Model get method */</span></td></tr>
+<td>136</td><td>    <a id="136c5" class="tk">rt_ertODEUpdateContinuousStates</a>(<a id="136c37" class="tk">&amp;</a>(<a id="136c39" class="tk">&amp;</a><a id="136c40" class="tk">Position_Tilt_M</a>)-&gt;<a id="136c58" class="tk">solverInfo</a>);</td></tr>
 <tr name="137" id="137">
-<td>137</td><td><a id="137c1" class="tk">RT_MODEL_Position_Tilt_T</a> <a id="137c26" class="tk">*</a> <a id="137c28" class="tk">Position_TiltModelClass</a>::<a id="137c53" class="tk">getRTM</a>()</td></tr>
+<td>137</td><td></td></tr>
 <tr name="138" id="138">
-<td>138</td><td><span class="br">{</span></td></tr>
+<td>138</td><td>    <span class="ct">/* Update absolute time for base rate */</span></td></tr>
 <tr name="139" id="139">
-<td>139</td><td>  <span class="kw">return</span> (<a id="139c11" class="tk">&amp;</a><a id="139c12" class="tk">Position_Tilt_M</a>);</td></tr>
+<td>139</td><td>    <span class="ct">/* The "clockTick0" counts the number of times the code of this task has</span></td></tr>
 <tr name="140" id="140">
-<td>140</td><td><span class="br">}</span></td></tr>
+<td>140</td><td><span class="ct">     * been executed. The absolute time is the multiplication of "clockTick0"</span></td></tr>
 <tr name="141" id="141">
-<td>141</td><td></td></tr>
+<td>141</td><td><span class="ct">     * and "Timing.stepSize0". Size of "clockTick0" ensures timer will not</span></td></tr>
+<tr name="142" id="142">
+<td>142</td><td><span class="ct">     * overflow during the application lifespan selected.</span></td></tr>
+<tr name="143" id="143">
+<td>143</td><td><span class="ct">     * Timer of this task consists of two 32 bit unsigned integers.</span></td></tr>
+<tr name="144" id="144">
+<td>144</td><td><span class="ct">     * The two integers represent the low bits Timing.clockTick0 and the high bits</span></td></tr>
+<tr name="145" id="145">
+<td>145</td><td><span class="ct">     * Timing.clockTickH0. When the low bit overflows to 0, the high bits increment.</span></td></tr>
+<tr name="146" id="146">
+<td>146</td><td><span class="ct">     */</span></td></tr>
+<tr name="147" id="147">
+<td>147</td><td>    <span class="kw">if</span> (<a id="147c9" class="tk">!</a>(<a id="147c11" class="tk">++</a>(<a id="147c14" class="tk">&amp;</a><a id="147c15" class="tk">Position_Tilt_M</a>)-&gt;<a id="147c33" class="tk">Timing</a>.<a id="147c40" class="tk">clockTick0</a>)) <span class="br">{</span></td></tr>
+<tr name="148" id="148">
+<td>148</td><td>      <a id="148c7" class="tk">++</a>(<a id="148c10" class="tk">&amp;</a><a id="148c11" class="tk">Position_Tilt_M</a>)-&gt;<a id="148c29" class="tk">Timing</a>.<a id="148c36" class="tk">clockTickH0</a>;</td></tr>
+<tr name="149" id="149">
+<td>149</td><td>    <span class="br">}</span></td></tr>
+<tr name="150" id="150">
+<td>150</td><td></td></tr>
+<tr name="151" id="151">
+<td>151</td><td>    (<a id="151c6" class="tk">&amp;</a><a id="151c7" class="tk">Position_Tilt_M</a>)-&gt;<a id="151c25" class="tk">Timing</a>.<a id="151c32" class="tk">t</a>[0] = <a id="151c39" class="tk">rtsiGetSolverStopTime</a>(<a id="151c61" class="tk">&amp;</a>(<a id="151c63" class="tk">&amp;</a><a id="151c64" class="tk">Position_Tilt_M</a></td></tr>
+<tr name="152" id="152">
+<td>152</td><td>      )-&gt;<a id="152c10" class="tk">solverInfo</a>);</td></tr>
+<tr name="153" id="153">
+<td>153</td><td></td></tr>
+<tr name="154" id="154">
+<td>154</td><td>    <span class="br">{</span></td></tr>
+<tr name="155" id="155">
+<td>155</td><td>      <span class="ct">/* Update absolute timer for sample time: [0.01s, 0.0s] */</span></td></tr>
+<tr name="156" id="156">
+<td>156</td><td>      <span class="ct">/* The "clockTick1" counts the number of times the code of this task has</span></td></tr>
+<tr name="157" id="157">
+<td>157</td><td><span class="ct">       * been executed. The resolution of this integer timer is 0.01, which is the step size</span></td></tr>
+<tr name="158" id="158">
+<td>158</td><td><span class="ct">       * of the task. Size of "clockTick1" ensures timer will not overflow during the</span></td></tr>
+<tr name="159" id="159">
+<td>159</td><td><span class="ct">       * application lifespan selected.</span></td></tr>
+<tr name="160" id="160">
+<td>160</td><td><span class="ct">       * Timer of this task consists of two 32 bit unsigned integers.</span></td></tr>
+<tr name="161" id="161">
+<td>161</td><td><span class="ct">       * The two integers represent the low bits Timing.clockTick1 and the high bits</span></td></tr>
+<tr name="162" id="162">
+<td>162</td><td><span class="ct">       * Timing.clockTickH1. When the low bit overflows to 0, the high bits increment.</span></td></tr>
+<tr name="163" id="163">
+<td>163</td><td><span class="ct">       */</span></td></tr>
+<tr name="164" id="164">
+<td>164</td><td>      (<a id="164c8" class="tk">&amp;</a><a id="164c9" class="tk">Position_Tilt_M</a>)-&gt;<a id="164c27" class="tk">Timing</a>.<a id="164c34" class="tk">clockTick1</a><a id="164c44" class="tk">++</a>;</td></tr>
+<tr name="165" id="165">
+<td>165</td><td>      <span class="kw">if</span> (<a id="165c11" class="tk">!</a>(<a id="165c13" class="tk">&amp;</a><a id="165c14" class="tk">Position_Tilt_M</a>)-&gt;<a id="165c32" class="tk">Timing</a>.<a id="165c39" class="tk">clockTick1</a>) <span class="br">{</span></td></tr>
+<tr name="166" id="166">
+<td>166</td><td>        (<a id="166c10" class="tk">&amp;</a><a id="166c11" class="tk">Position_Tilt_M</a>)-&gt;<a id="166c29" class="tk">Timing</a>.<a id="166c36" class="tk">clockTickH1</a><a id="166c47" class="tk">++</a>;</td></tr>
+<tr name="167" id="167">
+<td>167</td><td>      <span class="br">}</span></td></tr>
+<tr name="168" id="168">
+<td>168</td><td>    <span class="br">}</span></td></tr>
+<tr name="169" id="169">
+<td>169</td><td>  <span class="br">}</span>                                    <span class="ct">/* end MajorTimeStep */</span></td></tr>
+<tr name="170" id="170">
+<td>170</td><td><span class="br">}</span></td></tr>
+<tr name="171" id="171">
+<td>171</td><td></td></tr>
+<tr name="172" id="172">
+<td>172</td><td><span class="ct">/* Derivatives for root system: '&lt;Root&gt;' */</span></td></tr>
+<tr name="173" id="173">
+<td>173</td><td><span class="kw">void</span> <a id="173c6" class="tk">Position_TiltModelClass</a>::<a id="173c31" class="tk">Position_Tilt_derivatives</a>()</td></tr>
+<tr name="174" id="174">
+<td>174</td><td><span class="br">{</span></td></tr>
+<tr name="175" id="175">
+<td>175</td><td>  <a id="175c3" class="tk">XDot_Position_Tilt_T</a> <a id="175c24" class="tk">*</a><a id="175c25" class="tk">_rtXdot</a>;</td></tr>
+<tr name="176" id="176">
+<td>176</td><td>  <a id="176c3" class="tk">_rtXdot</a> = ((<a id="176c15" class="tk">XDot_Position_Tilt_T</a> <a id="176c36" class="tk">*</a>) (<a id="176c40" class="tk">&amp;</a><a id="176c41" class="tk">Position_Tilt_M</a>)-&gt;<a id="176c59" class="tk">ModelData</a>.<a id="176c69" class="tk">derivs</a>);</td></tr>
+<tr name="177" id="177">
+<td>177</td><td></td></tr>
+<tr name="178" id="178">
+<td>178</td><td>  <span class="ct">/* Derivatives for Integrator: '&lt;S2&gt;/Filter' */</span></td></tr>
+<tr name="179" id="179">
+<td>179</td><td>  <a id="179c3" class="tk">_rtXdot</a>-&gt;<a id="179c12" class="tk">Filter_CSTATE</a> = <a id="179c28" class="tk">Position_Tilt_B</a>.<a id="179c44" class="tk">FilterCoefficient</a>;</td></tr>
+<tr name="180" id="180">
+<td>180</td><td></td></tr>
+<tr name="181" id="181">
+<td>181</td><td>  <span class="ct">/* Derivatives for Integrator: '&lt;S3&gt;/Filter' */</span></td></tr>
+<tr name="182" id="182">
+<td>182</td><td>  <a id="182c3" class="tk">_rtXdot</a>-&gt;<a id="182c12" class="tk">Filter_CSTATE_b</a> = <a id="182c30" class="tk">Position_Tilt_B</a>.<a id="182c46" class="tk">FilterCoefficient_f</a>;</td></tr>
+<tr name="183" id="183">
+<td>183</td><td><span class="br">}</span></td></tr>
+<tr name="184" id="184">
+<td>184</td><td></td></tr>
+<tr name="185" id="185">
+<td>185</td><td><span class="ct">/* Model initialize function */</span></td></tr>
+<tr name="186" id="186">
+<td>186</td><td><span class="kw">void</span> <a id="186c6" class="tk">Position_TiltModelClass</a>::<a id="186c31" class="tk">initialize</a>()</td></tr>
+<tr name="187" id="187">
+<td>187</td><td><span class="br">{</span></td></tr>
+<tr name="188" id="188">
+<td>188</td><td>  <span class="ct">/* Registration code */</span></td></tr>
+<tr name="189" id="189">
+<td>189</td><td></td></tr>
+<tr name="190" id="190">
+<td>190</td><td>  <span class="ct">/* initialize real-time model */</span></td></tr>
+<tr name="191" id="191">
+<td>191</td><td>  (<span class="kw">void</span>) <a id="191c10" class="tk">memset</a>((<span class="kw">void</span> <a id="191c23" class="tk">*</a>)(<a id="191c26" class="tk">&amp;</a><a id="191c27" class="tk">Position_Tilt_M</a>), 0,</td></tr>
+<tr name="192" id="192">
+<td>192</td><td>                <span class="kw">sizeof</span>(<a id="192c24" class="tk">RT_MODEL_Position_Tilt_T</a>));</td></tr>
+<tr name="193" id="193">
+<td>193</td><td></td></tr>
+<tr name="194" id="194">
+<td>194</td><td>  <span class="br">{</span></td></tr>
+<tr name="195" id="195">
+<td>195</td><td>    <span class="ct">/* Setup solver object */</span></td></tr>
+<tr name="196" id="196">
+<td>196</td><td>    <a id="196c5" class="tk">rtsiSetSimTimeStepPtr</a>(<a id="196c27" class="tk">&amp;</a>(<a id="196c29" class="tk">&amp;</a><a id="196c30" class="tk">Position_Tilt_M</a>)-&gt;<a id="196c48" class="tk">solverInfo</a>, <a id="196c60" class="tk">&amp;</a>(<a id="196c62" class="tk">&amp;</a><a id="196c63" class="tk">Position_Tilt_M</a>)</td></tr>
+<tr name="197" id="197">
+<td>197</td><td>                          -&gt;<a id="197c29" class="tk">Timing</a>.<a id="197c36" class="tk">simTimeStep</a>);</td></tr>
+<tr name="198" id="198">
+<td>198</td><td>    <a id="198c5" class="tk">rtsiSetTPtr</a>(<a id="198c17" class="tk">&amp;</a>(<a id="198c19" class="tk">&amp;</a><a id="198c20" class="tk">Position_Tilt_M</a>)-&gt;<a id="198c38" class="tk">solverInfo</a>, <a id="198c50" class="tk">&amp;</a><a id="198c51" class="tk">rtmGetTPtr</a>((<a id="198c63" class="tk">&amp;</a><a id="198c64" class="tk">Position_Tilt_M</a>)));</td></tr>
+<tr name="199" id="199">
+<td>199</td><td>    <a id="199c5" class="tk">rtsiSetStepSizePtr</a>(<a id="199c24" class="tk">&amp;</a>(<a id="199c26" class="tk">&amp;</a><a id="199c27" class="tk">Position_Tilt_M</a>)-&gt;<a id="199c45" class="tk">solverInfo</a>, <a id="199c57" class="tk">&amp;</a>(<a id="199c59" class="tk">&amp;</a><a id="199c60" class="tk">Position_Tilt_M</a>)</td></tr>
+<tr name="200" id="200">
+<td>200</td><td>                       -&gt;<a id="200c26" class="tk">Timing</a>.<a id="200c33" class="tk">stepSize0</a>);</td></tr>
+<tr name="201" id="201">
+<td>201</td><td>    <a id="201c5" class="tk">rtsiSetdXPtr</a>(<a id="201c18" class="tk">&amp;</a>(<a id="201c20" class="tk">&amp;</a><a id="201c21" class="tk">Position_Tilt_M</a>)-&gt;<a id="201c39" class="tk">solverInfo</a>, <a id="201c51" class="tk">&amp;</a>(<a id="201c53" class="tk">&amp;</a><a id="201c54" class="tk">Position_Tilt_M</a>)</td></tr>
+<tr name="202" id="202">
+<td>202</td><td>                 -&gt;<a id="202c20" class="tk">ModelData</a>.<a id="202c30" class="tk">derivs</a>);</td></tr>
+<tr name="203" id="203">
+<td>203</td><td>    <a id="203c5" class="tk">rtsiSetContStatesPtr</a>(<a id="203c26" class="tk">&amp;</a>(<a id="203c28" class="tk">&amp;</a><a id="203c29" class="tk">Position_Tilt_M</a>)-&gt;<a id="203c47" class="tk">solverInfo</a>, (<a id="203c60" class="tk">real_T</a> <a id="203c67" class="tk">*</a><a id="203c68" class="tk">*</a>)</td></tr>
+<tr name="204" id="204">
+<td>204</td><td>                         <a id="204c26" class="tk">&amp;</a>(<a id="204c28" class="tk">&amp;</a><a id="204c29" class="tk">Position_Tilt_M</a>)-&gt;<a id="204c47" class="tk">ModelData</a>.<a id="204c57" class="tk">contStates</a>);</td></tr>
+<tr name="205" id="205">
+<td>205</td><td>    <a id="205c5" class="tk">rtsiSetNumContStatesPtr</a>(<a id="205c29" class="tk">&amp;</a>(<a id="205c31" class="tk">&amp;</a><a id="205c32" class="tk">Position_Tilt_M</a>)-&gt;<a id="205c50" class="tk">solverInfo</a>, <a id="205c62" class="tk">&amp;</a>(<a id="205c64" class="tk">&amp;</a><a id="205c65" class="tk">Position_Tilt_M</a></td></tr>
+<tr name="206" id="206">
+<td>206</td><td>      )-&gt;<a id="206c10" class="tk">Sizes</a>.<a id="206c16" class="tk">numContStates</a>);</td></tr>
+<tr name="207" id="207">
+<td>207</td><td>    <a id="207c5" class="tk">rtsiSetNumPeriodicContStatesPtr</a>(<a id="207c37" class="tk">&amp;</a>(<a id="207c39" class="tk">&amp;</a><a id="207c40" class="tk">Position_Tilt_M</a>)-&gt;<a id="207c58" class="tk">solverInfo</a>,</td></tr>
+<tr name="208" id="208">
+<td>208</td><td>      <a id="208c7" class="tk">&amp;</a>(<a id="208c9" class="tk">&amp;</a><a id="208c10" class="tk">Position_Tilt_M</a>)-&gt;<a id="208c28" class="tk">Sizes</a>.<a id="208c34" class="tk">numPeriodicContStates</a>);</td></tr>
+<tr name="209" id="209">
+<td>209</td><td>    <a id="209c5" class="tk">rtsiSetPeriodicContStateIndicesPtr</a>(<a id="209c40" class="tk">&amp;</a>(<a id="209c42" class="tk">&amp;</a><a id="209c43" class="tk">Position_Tilt_M</a>)-&gt;<a id="209c61" class="tk">solverInfo</a>,</td></tr>
+<tr name="210" id="210">
+<td>210</td><td>      <a id="210c7" class="tk">&amp;</a>(<a id="210c9" class="tk">&amp;</a><a id="210c10" class="tk">Position_Tilt_M</a>)-&gt;<a id="210c28" class="tk">ModelData</a>.<a id="210c38" class="tk">periodicContStateIndices</a>);</td></tr>
+<tr name="211" id="211">
+<td>211</td><td>    <a id="211c5" class="tk">rtsiSetPeriodicContStateRangesPtr</a>(<a id="211c39" class="tk">&amp;</a>(<a id="211c41" class="tk">&amp;</a><a id="211c42" class="tk">Position_Tilt_M</a>)-&gt;<a id="211c60" class="tk">solverInfo</a>,</td></tr>
+<tr name="212" id="212">
+<td>212</td><td>      <a id="212c7" class="tk">&amp;</a>(<a id="212c9" class="tk">&amp;</a><a id="212c10" class="tk">Position_Tilt_M</a>)-&gt;<a id="212c28" class="tk">ModelData</a>.<a id="212c38" class="tk">periodicContStateRanges</a>);</td></tr>
+<tr name="213" id="213">
+<td>213</td><td>    <a id="213c5" class="tk">rtsiSetErrorStatusPtr</a>(<a id="213c27" class="tk">&amp;</a>(<a id="213c29" class="tk">&amp;</a><a id="213c30" class="tk">Position_Tilt_M</a>)-&gt;<a id="213c48" class="tk">solverInfo</a>, (<a id="213c61" class="tk">&amp;</a><a id="213c62" class="tk">rtmGetErrorStatus</a>((</td></tr>
+<tr name="214" id="214">
+<td>214</td><td>      <a id="214c7" class="tk">&amp;</a><a id="214c8" class="tk">Position_Tilt_M</a>))));</td></tr>
+<tr name="215" id="215">
+<td>215</td><td>    <a id="215c5" class="tk">rtsiSetRTModelPtr</a>(<a id="215c23" class="tk">&amp;</a>(<a id="215c25" class="tk">&amp;</a><a id="215c26" class="tk">Position_Tilt_M</a>)-&gt;<a id="215c44" class="tk">solverInfo</a>, (<a id="215c57" class="tk">&amp;</a><a id="215c58" class="tk">Position_Tilt_M</a>));</td></tr>
+<tr name="216" id="216">
+<td>216</td><td>  <span class="br">}</span></td></tr>
+<tr name="217" id="217">
+<td>217</td><td></td></tr>
+<tr name="218" id="218">
+<td>218</td><td>  <a id="218c3" class="tk">rtsiSetSimTimeStep</a>(<a id="218c22" class="tk">&amp;</a>(<a id="218c24" class="tk">&amp;</a><a id="218c25" class="tk">Position_Tilt_M</a>)-&gt;<a id="218c43" class="tk">solverInfo</a>, <a id="218c55" class="tk">MAJOR_TIME_STEP</a>);</td></tr>
+<tr name="219" id="219">
+<td>219</td><td>  (<a id="219c4" class="tk">&amp;</a><a id="219c5" class="tk">Position_Tilt_M</a>)-&gt;<a id="219c23" class="tk">ModelData</a>.<a id="219c33" class="tk">intgData</a>.<a id="219c42" class="tk">y</a> = (<a id="219c47" class="tk">&amp;</a><a id="219c48" class="tk">Position_Tilt_M</a>)-&gt;<a id="219c66" class="tk">ModelData</a>.<a id="219c76" class="tk">odeY</a>;</td></tr>
+<tr name="220" id="220">
+<td>220</td><td>  (<a id="220c4" class="tk">&amp;</a><a id="220c5" class="tk">Position_Tilt_M</a>)-&gt;<a id="220c23" class="tk">ModelData</a>.<a id="220c33" class="tk">intgData</a>.<a id="220c42" class="tk">f</a>[0] = (<a id="220c50" class="tk">&amp;</a><a id="220c51" class="tk">Position_Tilt_M</a>)</td></tr>
+<tr name="221" id="221">
+<td>221</td><td>    -&gt;<a id="221c7" class="tk">ModelData</a>.<a id="221c17" class="tk">odeF</a>[0];</td></tr>
+<tr name="222" id="222">
+<td>222</td><td>  (<a id="222c4" class="tk">&amp;</a><a id="222c5" class="tk">Position_Tilt_M</a>)-&gt;<a id="222c23" class="tk">ModelData</a>.<a id="222c33" class="tk">intgData</a>.<a id="222c42" class="tk">f</a>[1] = (<a id="222c50" class="tk">&amp;</a><a id="222c51" class="tk">Position_Tilt_M</a>)</td></tr>
+<tr name="223" id="223">
+<td>223</td><td>    -&gt;<a id="223c7" class="tk">ModelData</a>.<a id="223c17" class="tk">odeF</a>[1];</td></tr>
+<tr name="224" id="224">
+<td>224</td><td>  (<a id="224c4" class="tk">&amp;</a><a id="224c5" class="tk">Position_Tilt_M</a>)-&gt;<a id="224c23" class="tk">ModelData</a>.<a id="224c33" class="tk">contStates</a> = ((<a id="224c48" class="tk">X_Position_Tilt_T</a> <a id="224c66" class="tk">*</a>)</td></tr>
+<tr name="225" id="225">
+<td>225</td><td>    <a id="225c5" class="tk">&amp;</a><a id="225c6" class="tk">Position_Tilt_X</a>);</td></tr>
+<tr name="226" id="226">
+<td>226</td><td>  <a id="226c3" class="tk">rtsiSetSolverData</a>(<a id="226c21" class="tk">&amp;</a>(<a id="226c23" class="tk">&amp;</a><a id="226c24" class="tk">Position_Tilt_M</a>)-&gt;<a id="226c42" class="tk">solverInfo</a>, (<span class="kw">void</span> <a id="226c60" class="tk">*</a>)<a id="226c62" class="tk">&amp;</a>(<a id="226c64" class="tk">&amp;</a><a id="226c65" class="tk">Position_Tilt_M</a></td></tr>
+<tr name="227" id="227">
+<td>227</td><td>                    )-&gt;<a id="227c24" class="tk">ModelData</a>.<a id="227c34" class="tk">intgData</a>);</td></tr>
+<tr name="228" id="228">
+<td>228</td><td>  <a id="228c3" class="tk">rtsiSetSolverName</a>(<a id="228c21" class="tk">&amp;</a>(<a id="228c23" class="tk">&amp;</a><a id="228c24" class="tk">Position_Tilt_M</a>)-&gt;<a id="228c42" class="tk">solverInfo</a>,"ode2");</td></tr>
+<tr name="229" id="229">
+<td>229</td><td>  <a id="229c3" class="tk">rtmSetTPtr</a>((<a id="229c15" class="tk">&amp;</a><a id="229c16" class="tk">Position_Tilt_M</a>), <a id="229c34" class="tk">&amp;</a>(<a id="229c36" class="tk">&amp;</a><a id="229c37" class="tk">Position_Tilt_M</a>)-&gt;<a id="229c55" class="tk">Timing</a>.<a id="229c62" class="tk">tArray</a>[0]);</td></tr>
+<tr name="230" id="230">
+<td>230</td><td>  (<a id="230c4" class="tk">&amp;</a><a id="230c5" class="tk">Position_Tilt_M</a>)-&gt;<a id="230c23" class="tk">Timing</a>.<a id="230c30" class="tk">stepSize0</a> = 0.01;</td></tr>
+<tr name="231" id="231">
+<td>231</td><td></td></tr>
+<tr name="232" id="232">
+<td>232</td><td>  <span class="ct">/* block I/O */</span></td></tr>
+<tr name="233" id="233">
+<td>233</td><td>  (<span class="kw">void</span>) <a id="233c10" class="tk">memset</a>(((<span class="kw">void</span> <a id="233c24" class="tk">*</a>) <a id="233c27" class="tk">&amp;</a><a id="233c28" class="tk">Position_Tilt_B</a>), 0,</td></tr>
+<tr name="234" id="234">
+<td>234</td><td>                <span class="kw">sizeof</span>(<a id="234c24" class="tk">B_Position_Tilt_T</a>));</td></tr>
+<tr name="235" id="235">
+<td>235</td><td></td></tr>
+<tr name="236" id="236">
+<td>236</td><td>  <span class="ct">/* states (continuous) */</span></td></tr>
+<tr name="237" id="237">
+<td>237</td><td>  <span class="br">{</span></td></tr>
+<tr name="238" id="238">
+<td>238</td><td>    (<span class="kw">void</span>) <a id="238c12" class="tk">memset</a>((<span class="kw">void</span> <a id="238c25" class="tk">*</a>)<a id="238c27" class="tk">&amp;</a><a id="238c28" class="tk">Position_Tilt_X</a>, 0,</td></tr>
+<tr name="239" id="239">
+<td>239</td><td>                  <span class="kw">sizeof</span>(<a id="239c26" class="tk">X_Position_Tilt_T</a>));</td></tr>
+<tr name="240" id="240">
+<td>240</td><td>  <span class="br">}</span></td></tr>
+<tr name="241" id="241">
+<td>241</td><td></td></tr>
+<tr name="242" id="242">
+<td>242</td><td>  <span class="ct">/* external inputs */</span></td></tr>
+<tr name="243" id="243">
+<td>243</td><td>  (<span class="kw">void</span>) <a id="243c10" class="tk">memset</a>((<span class="kw">void</span> <a id="243c23" class="tk">*</a>)<a id="243c25" class="tk">&amp;</a><a id="243c26" class="tk">Position_Tilt_U</a>, 0,</td></tr>
+<tr name="244" id="244">
+<td>244</td><td>                <span class="kw">sizeof</span>(<a id="244c24" class="tk">ExtU_Position_Tilt_T</a>));</td></tr>
+<tr name="245" id="245">
+<td>245</td><td></td></tr>
+<tr name="246" id="246">
+<td>246</td><td>  <span class="ct">/* external outputs */</span></td></tr>
+<tr name="247" id="247">
+<td>247</td><td>  (<span class="kw">void</span>) <a id="247c10" class="tk">memset</a>((<span class="kw">void</span> <a id="247c23" class="tk">*</a>)<a id="247c25" class="tk">&amp;</a><a id="247c26" class="tk">Position_Tilt_Y</a>, 0,</td></tr>
+<tr name="248" id="248">
+<td>248</td><td>                <span class="kw">sizeof</span>(<a id="248c24" class="tk">ExtY_Position_Tilt_T</a>));</td></tr>
+<tr name="249" id="249">
+<td>249</td><td></td></tr>
+<tr name="250" id="250">
+<td>250</td><td>  <span class="ct">/* InitializeConditions for Integrator: '&lt;S2&gt;/Filter' */</span></td></tr>
+<tr name="251" id="251">
+<td>251</td><td>  <a id="251c3" class="tk">Position_Tilt_X</a>.<a id="251c19" class="tk">Filter_CSTATE</a> = <a id="251c35" class="tk">Position_Tilt_P</a>.<a id="251c51" class="tk">Filter_IC</a>;</td></tr>
+<tr name="252" id="252">
+<td>252</td><td></td></tr>
+<tr name="253" id="253">
+<td>253</td><td>  <span class="ct">/* InitializeConditions for Integrator: '&lt;S3&gt;/Filter' */</span></td></tr>
+<tr name="254" id="254">
+<td>254</td><td>  <a id="254c3" class="tk">Position_Tilt_X</a>.<a id="254c19" class="tk">Filter_CSTATE_b</a> = <a id="254c37" class="tk">Position_Tilt_P</a>.<a id="254c53" class="tk">Filter_IC_d</a>;</td></tr>
+<tr name="255" id="255">
+<td>255</td><td><span class="br">}</span></td></tr>
+<tr name="256" id="256">
+<td>256</td><td></td></tr>
+<tr name="257" id="257">
+<td>257</td><td><span class="ct">/* Model terminate function */</span></td></tr>
+<tr name="258" id="258">
+<td>258</td><td><span class="kw">void</span> <a id="258c6" class="tk">Position_TiltModelClass</a>::<a id="258c31" class="tk">terminate</a>()</td></tr>
+<tr name="259" id="259">
+<td>259</td><td><span class="br">{</span></td></tr>
+<tr name="260" id="260">
+<td>260</td><td>  <span class="ct">/* (no terminate code required) */</span></td></tr>
+<tr name="261" id="261">
+<td>261</td><td><span class="br">}</span></td></tr>
+<tr name="262" id="262">
+<td>262</td><td></td></tr>
+<tr name="263" id="263">
+<td>263</td><td><span class="ct">/* Constructor */</span></td></tr>
+<tr name="264" id="264">
+<td>264</td><td><a id="264c1" class="tk">Position_TiltModelClass</a>::<a id="264c26" class="tk">Position_TiltModelClass</a>()</td></tr>
+<tr name="265" id="265">
+<td>265</td><td><span class="br">{</span></td></tr>
+<tr name="266" id="266">
+<td>266</td><td>  <span class="kw">static</span> <span class="kw">const</span> <a id="266c16" class="tk">P_Position_Tilt_T</a> <a id="266c34" class="tk">Position_Tilt_P_temp</a> = <span class="br">{</span></td></tr>
+<tr name="267" id="267">
+<td>267</td><td>    0.01,                              <span class="ct">/* Variable: Kd_E</span></td></tr>
+<tr name="268" id="268">
+<td>268</td><td><span class="ct">                                        * Referenced by: '&lt;S3&gt;/Derivative Gain'</span></td></tr>
+<tr name="269" id="269">
+<td>269</td><td><span class="ct">                                        */</span></td></tr>
+<tr name="270" id="270">
+<td>270</td><td>    0.01,                              <span class="ct">/* Variable: Kd_N</span></td></tr>
+<tr name="271" id="271">
+<td>271</td><td><span class="ct">                                        * Referenced by: '&lt;S2&gt;/Derivative Gain'</span></td></tr>
+<tr name="272" id="272">
+<td>272</td><td><span class="ct">                                        */</span></td></tr>
+<tr name="273" id="273">
+<td>273</td><td>    0.15,                              <span class="ct">/* Variable: Kp_E</span></td></tr>
+<tr name="274" id="274">
+<td>274</td><td><span class="ct">                                        * Referenced by: '&lt;S3&gt;/Proportional Gain'</span></td></tr>
+<tr name="275" id="275">
+<td>275</td><td><span class="ct">                                        */</span></td></tr>
+<tr name="276" id="276">
+<td>276</td><td>    0.15,                              <span class="ct">/* Variable: Kp_N</span></td></tr>
+<tr name="277" id="277">
+<td>277</td><td><span class="ct">                                        * Referenced by: '&lt;S2&gt;/Proportional Gain'</span></td></tr>
+<tr name="278" id="278">
+<td>278</td><td><span class="ct">                                        */</span></td></tr>
+<tr name="279" id="279">
+<td>279</td><td>    100.0,                             <span class="ct">/* Mask Parameter: PIDController_N</span></td></tr>
+<tr name="280" id="280">
+<td>280</td><td><span class="ct">                                        * Referenced by: '&lt;S2&gt;/Filter Coefficient'</span></td></tr>
+<tr name="281" id="281">
+<td>281</td><td><span class="ct">                                        */</span></td></tr>
+<tr name="282" id="282">
+<td>282</td><td>    100.0,                             <span class="ct">/* Mask Parameter: PIDController1_N</span></td></tr>
+<tr name="283" id="283">
+<td>283</td><td><span class="ct">                                        * Referenced by: '&lt;S3&gt;/Filter Coefficient'</span></td></tr>
+<tr name="284" id="284">
+<td>284</td><td><span class="ct">                                        */</span></td></tr>
+<tr name="285" id="285">
+<td>285</td><td>    0.0,                               <span class="ct">/* Expression: InitialConditionForFilter</span></td></tr>
+<tr name="286" id="286">
+<td>286</td><td><span class="ct">                                        * Referenced by: '&lt;S2&gt;/Filter'</span></td></tr>
+<tr name="287" id="287">
+<td>287</td><td><span class="ct">                                        */</span></td></tr>
+<tr name="288" id="288">
+<td>288</td><td>    0.0                                <span class="ct">/* Expression: InitialConditionForFilter</span></td></tr>
+<tr name="289" id="289">
+<td>289</td><td><span class="ct">                                        * Referenced by: '&lt;S3&gt;/Filter'</span></td></tr>
+<tr name="290" id="290">
+<td>290</td><td><span class="ct">                                        */</span></td></tr>
+<tr name="291" id="291">
+<td>291</td><td>  <span class="br">}</span>;                                   <span class="ct">/* Modifiable parameters */</span></td></tr>
+<tr name="292" id="292">
+<td>292</td><td></td></tr>
+<tr name="293" id="293">
+<td>293</td><td>  <span class="ct">/* Initialize tunable parameters */</span></td></tr>
+<tr name="294" id="294">
+<td>294</td><td>  <a id="294c3" class="tk">Position_Tilt_P</a> = <a id="294c21" class="tk">Position_Tilt_P_temp</a>;</td></tr>
+<tr name="295" id="295">
+<td>295</td><td><span class="br">}</span></td></tr>
+<tr name="296" id="296">
+<td>296</td><td></td></tr>
+<tr name="297" id="297">
+<td>297</td><td><span class="ct">/* Destructor */</span></td></tr>
+<tr name="298" id="298">
+<td>298</td><td><a id="298c1" class="tk">Position_TiltModelClass</a>::<a id="298c26" class="tk">~</a><a id="298c27" class="tk">Position_TiltModelClass</a>()</td></tr>
+<tr name="299" id="299">
+<td>299</td><td><span class="br">{</span></td></tr>
+<tr name="300" id="300">
+<td>300</td><td>  <span class="ct">/* Currently there is no destructor body generated.*/</span></td></tr>
+<tr name="301" id="301">
+<td>301</td><td><span class="br">}</span></td></tr>
+<tr name="302" id="302">
+<td>302</td><td></td></tr>
+<tr name="303" id="303">
+<td>303</td><td><span class="ct">/* Real-Time Model get method */</span></td></tr>
+<tr name="304" id="304">
+<td>304</td><td><a id="304c1" class="tk">RT_MODEL_Position_Tilt_T</a> <a id="304c26" class="tk">*</a> <a id="304c28" class="tk">Position_TiltModelClass</a>::<a id="304c53" class="tk">getRTM</a>()</td></tr>
+<tr name="305" id="305">
+<td>305</td><td><span class="br">{</span></td></tr>
+<tr name="306" id="306">
+<td>306</td><td>  <span class="kw">return</span> (<a id="306c11" class="tk">&amp;</a><a id="306c12" class="tk">Position_Tilt_M</a>);</td></tr>
+<tr name="307" id="307">
+<td>307</td><td><span class="br">}</span></td></tr>
+<tr name="308" id="308">
+<td>308</td><td></td></tr>
 </table>
 </pre>
 </body>

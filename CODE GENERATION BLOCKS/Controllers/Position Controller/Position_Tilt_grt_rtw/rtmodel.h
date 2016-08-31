@@ -7,9 +7,9 @@
  *
  * Code generation for model "Position_Tilt".
  *
- * Model version              : 1.116
+ * Model version              : 1.120
  * Simulink Coder version : 8.10 (R2016a) 10-Feb-2016
- * C++ source code generated on : Thu Jul 28 11:58:29 2016
+ * C++ source code generated on : Tue Aug 30 18:08:24 2016
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -33,12 +33,6 @@
  * ROOT_IO_FORMAT: 2 (Part of model data structure)
  */
 # define ROOT_IO_FORMAT                2
-
-/* Macros generated for backwards compatibility  */
-#ifndef rtmGetStopRequested
-# define rtmGetStopRequested(rtm)      ((void*) 0)
-#endif
-
 #define MODEL_CLASSNAME                Position_TiltModelClass
 #define MODEL_STEPNAME                 step
 #endif                                 /* RTW_HEADER_rtmodel_h_ */

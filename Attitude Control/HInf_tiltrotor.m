@@ -38,8 +38,8 @@ motor = 1/(1+tau*s);
 
 % Outer regulator
 Cphi0 = tunablePID('Cphi0','pd');                
-Cphi0.Kp.Value = 10;                % initialize Kp
-Cphi0.Kd.Value =  0.0050;           % initialize Kd
+Cphi0.Kp.Value = 1.9;                % initialize Kp
+Cphi0.Kd.Value =  0.005;           % initialize Kd
 Cphi0.Tf.Value = 0.01;              % set parameter Tf
 Cphi0.Tf.Free = false;              % fix parameter Tf to this value
 Cphi0.u = 'e_phi';                  % Input error for Outer regulator                              
@@ -47,9 +47,9 @@ Cphi0.y = 'deltaPhi';               % Output of the outer regualor
 
 % Innter regulator
 Cp0 = tunablePID('Cp0','pid');
-Cp0.Kp.Value = 1;
-Cp0.Ki.Value = 0.8;
-Cp0.Kd.Value = 0.05;
+Cp0.Kp.Value = Kpp;
+Cp0.Ki.Value = Kip;
+Cp0.Kd.Value = Kdp;
 Cp0.Tf.Value = 0.01;                % set parameter Tf
 Cp0.Tf.Free = false;
 Cp0.u = 'e_p';                      % Input error for inner (rate) regulator
@@ -69,7 +69,8 @@ X4 = AnalysisPoint('phi');
 % -- deltaOmega_delayed --> | Gp | -- p --> | Motor | --> | 1/s | -->
 
 % First try, neglect motor dynamics
-InnerLoop0 = feedback(X3*motor*G_p*X2*sys_delay*mixer*X1*Cp0,1);
+%InnerLoop0 = feedback(X3*motor*G_p*X2*sys_delay*mixer*X1*Cp0,1); % VERSIONE CON DELAY
+InnerLoop0 = feedback(X3*motor*G_p*X2*mixer*X1*Cp0,1);
 InnerLoop0.u = 'p_ref';
 
 % the outer loop observed output is phi
@@ -88,7 +89,7 @@ CL0.OutputName = 'phi';
 % (gain from reference input to tracking error) as a function of frequency
 % -------------------------------------------------------------------------
 
-wc = 7;                               %[rad/s] bandwidth of the system
+wc = 3;                               %[rad/s] bandwidth of the system
 responsetime = 2/wc;                  %[s] In this way we are able to track all the signals in the bandwidth of the system
 dcerror = 0.0001;                      %[%] steady state error ( relative gain of input vs output) (default value)
 peakerror = 1.2;                    
@@ -102,7 +103,7 @@ viewSpec(R1);                       % Shows the first request
 
 % Roll-off requirements
 R2 = TuningGoal.MaxLoopGain('phi',wc/s);
-R2.Focus = [0.1*wc,1000*wc];
+%R2.Focus = [0.1*wc,1000*wc];
 
 % R2 = TuningGoal.MaxLoopGain('p_disturb',100,0.1);
  %R2 = TuningGoal.MaxLoopGain('phi',wc/s);
@@ -129,7 +130,7 @@ viewSpec(R2);
 %Tune the control system
 SoftReqs = [];
 %HardReqs = [Rtrack Rreject];
-HardReqs = [R1];
+HardReqs = [R1 R2];
 [CL,fSoft,gHard] = systune(CL0,SoftReqs,HardReqs);
 
 % Plot results

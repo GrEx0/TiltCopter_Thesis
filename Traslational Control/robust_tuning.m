@@ -21,6 +21,7 @@ mixer.u = 'deltaFx'; mixer.y = 'deltaAlpha';
     num_i = B0;
     den_i = [1 B2 B3 B4];
     servo = tf(num_i,den_i);
+    servo = servo.Nominal;
 %% Controllers definition
 
 Ts = 0.01;                               % Order of the filter for the pids
@@ -57,9 +58,9 @@ grid minor
 % The starting parameters have been obtained by manual tuning the real
 % system
 Cu0 = tunablePID('Cu0','pid');
-Cu0.Kp.Value = Kp_u;
+Cu0.Kp.Value = 4;
 Cu0.Ki.Value = 0;
-Cu0.Kd.Value = Kd_u;
+Cu0.Kd.Value = 4;
 Cu0.Tf.Value = 0.01;                % set parameter Tf
 Cu0.Tf.Free = false;
 Cu0.u = 'e_u';                      % Input error for inner (rate) regulator
@@ -77,7 +78,7 @@ CL0.OutputName = 'u';
 % (gain from reference input to tracking error) as a function of frequency
 % -------------------------------------------------------------------------
 
-wc = 1.2;                               %[rad/s] bandwidth of the system
+wc = 1.8;                               %[rad/s] bandwidth of the system
 responsetime = 2/wc;                   %[s] In this way we are able to track all the signals in the bandwidth of the system
 dcerror = 0.0001;                      %[%] steady state error ( relative gain of input vs output) (default value)
 peakerror = 1.2;                    
@@ -100,7 +101,7 @@ HardReqs = [R1 R3];
 % Plot results
 figure('name', 'Tracking Requirement')
 viewSpec(R1,CL)
-figure('name', 'Roll-off requirements')
+figure('name', 'Disturbance rejection requirements')
 viewSpec(R3,CL)
 
 %
@@ -117,48 +118,13 @@ title('Closed-loop response')
 L_inner_opt = X3*G_t*servo*X4*mixer*X1*Cu;
 figure;
 bode(L_inner_opt);margin(L_inner_opt);
-% %% Error parametrization
-% %Define the nominal behaviour of the system
-% sysnom = G_.NominalValue;
-% 
-% %Given the uncertainty, I can define a vector of possible system
-% parray = usample(G_q,10);
-% om = logspace(-2,2);
-% parrayg = frd(parray,om);
-% 
-% %Plot the nominal behaviour plus a "cloud" of possible bode diagram
-% figure
-% bode(parray,'b',sysnom,'r+',om); grid
-% 
-% %Creates an uncertain linear, time-invariant objects are used to represent 
-% %unknown dynamic objects whose only known attributes are bounds on their frequency response
-% unc = ultidyn('unc',[1 1]);
-% 
-% %Define error and relative error
-% error = (sysnom-parray);
-% relerror = error/sysnom;
-% 
-% %Find the multiplicative uncertainty form
-% [Pm,InfoPm] = ucover(parrayg,sysnom);
-% Wm = InfoPm.W1;   
-% figure
-% bodemag(relerror,'b--',Wm,'r',om); grid
-% title('Multiplicative Uncertainty')
-% legend('Relative errors', 'Magnitude of W','location','southwest')
-% 
-% %Find the additive uncertainty form
-% [Pa,InfoPa] = ucover(parrayg,sysnom,1,'additive');
-% Wa = InfoPa.W1; 
-% figure
-% bodemag(error, 'b--',Wa,'r',om); grid
-% title('Additive Uncertainty')
-% legend('Errors', 'Magnitude of W','location','southwest')
-% 
-% %Final definition of the system with both uncertainty form
-% sysmul = sysnom*(1 + Wm*unc);
-% sysadd = sysnom + Wa*unc;
-% 
-% 
-% 
-% 
-% 
+
+
+% Sensitivity functions
+% Sensitivity functions OUTER LOOP -  ONLY TUNED SYSTEM
+loops = loopsens(G_t*servo*mixer,Cu);
+figure
+bodemag(loops.Li,'r',loops.Si,'b',loops.Ti,'g')
+legend('L','S','T')
+%xlim([1e-2 1e2]);
+grid minor

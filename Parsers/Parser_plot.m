@@ -13,7 +13,7 @@
 LOG_PARSER = 'logParser.jar';
 LOGS_FOLDER = 'parsed_logs';
 
-LOG_NAME = 'tilt_3108_13';
+LOG_NAME = 'tilt_3108_16';
 LOG_TYPE = '.txt';
 LOG_FOLDER = strcat(LOGS_FOLDER,'/',LOG_NAME);
 LOG_FILE = strcat(LOG_NAME,LOG_TYPE);

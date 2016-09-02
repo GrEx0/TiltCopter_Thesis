@@ -94,7 +94,7 @@ X2 = AnalysisPoint('deltaOmega');
 X3 = AnalysisPoint('p');
 X4 = AnalysisPoint('phi');
 
-InnerLoop0 = feedback(X3*motor*G_p*X2*mixer*X1*Cp0,1);
+InnerLoop0 = feedback(X3*motor*G_p*X2*mixer*X1*sys_delay_pade*Cp0,1);
 InnerLoop0.u = 'p_0';
 
 %% TUNING REQUIREMENTS INNER LOOP
@@ -150,7 +150,7 @@ loops = loopsens(X3*motor*G_p*X2*mixer*X1, R_inner_tuned);
 figure
 bodemag(loops.Li,'r',loops.Si,'b',loops.Ti,'g')
 legend('L','S','T')
-%xlim([1e-2 1e4]);
+%xlim([1e-2 1e2]);
 grid minor
 
 
@@ -173,10 +173,10 @@ Cp0 = tunablePID('Cp0','pid');
 % Cp0.Kd.Value = 0.0583;
 % Cp0.Tf.Value = 0.01;                % set parameter Tf
 % Valori di partenza test #2
-% Cp0.Kp.Value = 0.578;
-% Cp0.Ki.Value = 0.7;
-% Cp0.Kd.Value = 0.0158;
-% Cp0.Tf.Value = 0.01;                % set parameter Tf
+Cp0.Kp.Value = 0.578;
+Cp0.Ki.Value = 0.7;
+Cp0.Kd.Value = 0.0158;
+Cp0.Tf.Value = 0.01;                % set parameter Tf
 %valori di partenza test #3
 % Cp0.Kp.Value = 0.188;
 % Cp0.Ki.Value = 3.25;
@@ -188,7 +188,7 @@ Cp0.Kp.Value = 0.3;
 Cp0.Ki.Value = 0.697;
 Cp0.Kd.Value = 0.00534;
 Cp0.Tf.Value = 0.01;                % set parameter Tf
-% RESULT OK
+% RESULT NON FUNZIONANO
 Cp0.Tf.Free = false;
 Cp0.Kp.Free = false;
 Cp0.Ki.Free = false;
@@ -226,7 +226,7 @@ HardReqs = [R1 R3_outer];
 % Plot results
 figure('name', 'Tracking Requirement')
 viewSpec(R1,CL)
-figure('name', 'Disturbance rejection requirements')
+figure('name', 'Roll-off requirements')
 viewSpec(R3_outer,CL)
 
 %

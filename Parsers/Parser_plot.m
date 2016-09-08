@@ -13,7 +13,7 @@
 LOG_PARSER = 'logParser.jar';
 LOGS_FOLDER = 'parsed_logs';
 
-LOG_NAME = 'tilt_3108_16';
+LOG_NAME = 'atti_testbed_0509_8_bis';
 LOG_TYPE = '.txt';
 LOG_FOLDER = strcat(LOGS_FOLDER,'/',LOG_NAME);
 LOG_FILE = strcat(LOG_NAME,LOG_TYPE);
@@ -44,6 +44,7 @@ G_ATTITUDE_SUFFIX = '-GND_ATTITUDE';
 G_POSITION_SUFFIX = '-GND_POSITION';
 WAYPOINT_SUFFIX = '-WAYPOINT';
 HEARTBEAT_SUFFIX = '-HEARTBEAT';
+ATTITUDE_CTR_TEST_SUFFIX = '-ATTITUDE_CTR_TEST';
 
 
 %% Parsing
@@ -231,6 +232,8 @@ clear attitude_ctr_file;
 clear attitude_ctr_data;
 clear ATTITUDE_CTR_SUFFIX;
 
+
+
 try
     altitude_ctr_file = strcat(LOG_NAME,ALTITUDE_CTR_SUFFIX,LOG_TYPE);
     altitude_ctr_data = dlmread(altitude_ctr_file);
@@ -384,6 +387,26 @@ end
 clear waypoint_file;
 clear waypoint_data;
 clear WAYPOINT_SUFFIX;
+
+% AGGIUNGO ATTITUDE_CRT_TEST
+try
+    attitude_ctr_test_file = strcat(LOG_NAME,ATTITUDE_CTR_TEST_SUFFIX,LOG_TYPE);
+    attitude_ctr_test_data = dlmread(attitude_ctr_test_file);
+    
+    attitude_ctr_test_T = attitude_ctr_test_data(:,1);
+    attitude_ctr_test_r = attitude_ctr_test_data(:,2);
+    attitude_ctr_test_p = attitude_ctr_test_data(:,3);
+    attitude_ctr_test_y = attitude_ctr_test_data(:,4);
+    attitude_ctr_test_d2 = attitude_ctr_test_data(:,6);
+    attitude_ctr_test_d4 = attitude_ctr_test_data(:,8);
+    
+    disp(strcat(ATTITUDE_CTR_TEST_SUFFIX,'(attitude_ctr_test_T,attitude_ctr_test_r, attitude_ctr_test_p, attitude_ctr_test_y, attitude_ctr_test_d2, attitude_ctr_test_d4)'));
+catch
+end
+
+clear attitude_ctr_file;
+clear attitude_ctr_data;
+clear ATTITUDE_CTR_SUFFIX;
 
 clear LOG_NAME;
 clear LOG_TYPE;

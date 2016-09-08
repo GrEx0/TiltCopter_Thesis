@@ -19,7 +19,7 @@ Fy = 0;
 %Set point u = [height[m] roll_a[rad] pitch_a[rad] yaw_r[rad/s]]
 U = [-1; 0; 0; 0];
 opengl hardwarebasic
-sim Simulator_weighted_inv
+sim Simulator_swintheloop
 
 P_e = yout(: ,1:3);
 V_b = yout(: ,4:6);

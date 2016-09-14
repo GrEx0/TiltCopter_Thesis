@@ -1,4 +1,11 @@
-% script per fare software in the loop
+% This script allows to evaluate the simulator performances taking the real
+% inputs logged from real flight tests.
+% Usage: 
+% -Load the flight log, 
+% modify INFLIGHT variable depending if the log was on testbed or inflight
+% run the script Swintheloop.m script
+% Open the simulink model Simulator_swintheloop.slx and you're good to go.
+
 Ts = 0.01;
 INFLIGHT = 0;                       % In-flight tests, 0 disabled 1 enabled
 

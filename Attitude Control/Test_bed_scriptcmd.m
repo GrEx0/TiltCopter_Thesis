@@ -1,3 +1,8 @@
+% This script performs the test_bed roll attidude control experimental tests.
+% specify in test_bed the commands (roll/rollMax) and the seconds to wait
+% between each command (seconds)
+% Uses bluetooth connection
+
 % Setup the correct CHARSET encoding for serial
     slCharacterEncoding('UTF-8');
 
@@ -70,10 +75,10 @@ test_bed = [0 0.1 0 -0.1 0 0.3 0 -0.3 0.5 0 -0.5 0.67 0 -0.67 0 ];
 % seconds = 5;
 % test_bed = [0 3 0 -3 0 6 0 -6 0];
 %% Bluetooth comunication
-%      s = Bluetooth('HB01',1);
-%     disp('Opening Bluetooth connection..');
-%     fopen(s);
-%     disp('Bluetooth connected!');
+     s = Bluetooth('HB01',1);
+    disp('Opening Bluetooth connection..');
+    fopen(s);
+    disp('Bluetooth connected!');
 
 logName = 'atti_testbed_0509_8';
 % Setup log

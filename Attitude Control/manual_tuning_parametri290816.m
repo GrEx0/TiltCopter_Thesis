@@ -244,7 +244,7 @@ step(CL);
 
 % Ricalcolo L_outer
 L_inner_roll_tuned = X3*motor*G_p*X2*mixer*X1*Cp; 
-L_outer  = G_roll*feedback(L_inner_roll_tuned,1)*Cphi0 ;
+L_outer  = G_roll*feedback(L_inner_roll_tuned,1)*Ctheta ;
 if 1 
 figure('name','Roll outer loop - HINF Tuned');
 bode(L_outer);margin(L_outer); grid;

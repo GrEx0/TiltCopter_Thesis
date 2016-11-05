@@ -18,7 +18,7 @@ Fy = 0;
 
 %Set point u = [height[m] roll_a[rad] pitch_a[rad] yaw_r[rad/s]]
 U = [-1; 0; 0; 0];
-opengl hardwarebasic$
+opengl hardwarebasic
 
 % VERSIONE SIMULATORE CON MIXER MATRIX PSEUDO INVERSA
 sim Simulator_weighted_inv
